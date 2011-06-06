@@ -1,0 +1,24 @@
+<mongoChangeLog>
+    <changeSet changeId="ChangeSet-1" author="mlysaght">
+        <script>
+            db.organization.insert({
+                "Organization" : "10Gen",
+                "Location" : "NYC",
+                DateFounded : {"Year" : 2008, "Month" : 01, "day" :01}
+            });
+            db.organization.insert({
+                "Organization" : "SecondMarket",
+                "Location" : "NYC",
+                DateFounded : {"Year" : 2004, "Month" : 05, "day" :04}
+            });
+        </script>
+    </changeSet>
+    <changeSet changeId="ChangeSet-2" author="mlysaght">
+        <script>
+            db.user.insert({ "Name" : "Michael Lysaght"});
+        </script>
+        <script>
+            db.user.insert({ "Name" : "Oleksii Iepishkin"});
+        </script>
+    </changeSet>
+</mongoChangeLog>
