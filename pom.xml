@@ -4,7 +4,7 @@
 
     <groupId>org.mongeez</groupId>
     <artifactId>mongeez</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.9.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Mongeez</name>
@@ -92,33 +92,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <repositories>
-        <repository>
-            <id>Morphia</id>
-            <name>Morphia Repo</name>
-            <url>http://morphia.googlecode.com/svn/mavenrepo</url>
-            <layout>default</layout>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-        </repository>
-    </repositories>
-
-    <distributionManagement>
-        <repository>
-            <id>rstn-internal</id>
-            <name>Internal Release Repository</name>
-            <url>dav:http://maven.secondmarket.com/repository/internal</url>
-        </repository>
-        <snapshotRepository>
-            <id>rstn-snapshots</id>
-            <name>Internal Snapshot Repository</name>
-            <url>dav:http://maven.secondmarket.com/repository/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
-
 </project>
