@@ -2,13 +2,47 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+    
     <groupId>org.mongeez</groupId>
     <artifactId>mongeez</artifactId>
     <version>0.9.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>Mongeez</name>
+    <description>An opensource project for mongodb change management</description>
     <url>http://mongeez.org</url>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:git@github.com:secondmarket/mongeez.git</connection>
+        <developerConnection>scm:git:git@github.com:secondmarket/mongeez.git</developerConnection>
+        <url>git@github.com:secondmarket/mongeez.git</url>
+    </scm>
+
+    <developers>
+        <developer>
+            <id>epishkin</id>
+            <name>OLEKSII IEPISHKIN</name>
+            <email>epishkin@gmail.com</email>
+        </developer>
+        <developer>
+            <id>mlysaght</id>
+            <name>Michael Lysaght</name>
+            <email>mlysaght@secondmarket.com</email>
+        </developer>
+    </developers>
 
     <properties>
         <java.version>1.6</java.version>
@@ -57,14 +91,6 @@
     </dependencies>
 
     <build>
-        <extensions>
-            <extension>
-                <groupId>org.apache.maven.wagon</groupId>
-                <artifactId>wagon-webdav</artifactId>
-                <version>1.0-beta-2</version>
-            </extension>
-        </extensions>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -90,6 +116,31 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>sonatype-nexus-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>sonatype-nexus-staging</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
+    </distributionManagement>
 </project>
