@@ -1,2 +1,21 @@
-README
-------
+Welcome to the mongeez wiki!
+### What is mongeez?
+todo: ???????
+
+### Checkout the powerpoint presentation with usage example
+todo: ???????
+
+###  Join the user group
+http://groups.google.com/group/mongeez-users?hl=en
+
+### Become a contributor
+http://groups.google.com/group/mongeez-dev?hl=en
+
+
+### Add mongeez to your project
+Maven repo - http://repo1.maven.org/maven2/ or https://oss.sonatype.org/content/groups/public/
+
+&#60;&#100;&#101;&#112;&#101;&#110;&#100;&#101;&#110;&#99;&#121;&#62;<br />&#32;&#32;&#32;&#32;&#60;&#103;&#114;&#111;&#117;&#112;&#73;&#100;&#62;&#111;&#114;&#103;&#46;&#109;&#111;&#110;&#103;&#101;&#101;&#122;&#60;&#47;&#103;&#114;&#111;&#117;&#112;&#73;&#100;&#62;<br />&#32;&#32;&#32;&#32;&#60;&#97;&#114;&#116;&#105;&#102;&#97;&#99;&#116;&#73;&#100;&#62;&#109;&#111;&#110;&#103;&#101;&#101;&#122;&#60;&#47;&#97;&#114;&#116;&#105;&#102;&#97;&#99;&#116;&#73;&#100;&#62;<br />&#32;&#32;&#32;&#32;&#60;&#118;&#101;&#114;&#115;&#105;&#111;&#110;&#62;&#48;&#46;&#57;&#46;&#49;&#60;&#47;&#118;&#101;&#114;&#115;&#105;&#111;&#110;&#62;<br />&#60;&#47;&#100;&#101;&#112;&#101;&#110;&#100;&#101;&#110;&#99;&#121;&#62;
+
+### Or download mongeez from
+https://oss.sonatype.org/content/groups/public/org/mongeez/mongeez/0.9.1/
