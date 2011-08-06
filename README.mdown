@@ -1,5 +1,9 @@
 Welcome to the mongeez wiki!
 ### What is mongeez?
+
+mongeez allows you to manage change of your mongo documents and propagate these changes in sync with your code changes when you preform deployments.
+
+For further information and usage guidelines check out the wiki:
 https://github.com/secondmarket/mongeez/wiki
 
 ###  Join the user group
