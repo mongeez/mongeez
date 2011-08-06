@@ -1,9 +1,6 @@
 Welcome to the mongeez wiki!
 ### What is mongeez?
-todo: ???????
-
-### Checkout the powerpoint presentation with usage example
-todo: ???????
+https://github.com/secondmarket/mongeez/wiki
 
 ###  Join the user group
 http://groups.google.com/group/mongeez-users?hl=en
