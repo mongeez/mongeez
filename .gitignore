@@ -1,0 +1,12 @@
+# maven files
+/*/target
+
+# test logs
+test-output
+messages.log
+
+# IDEA files
+.idea
+*.iml
+*.ipr
+*.iws

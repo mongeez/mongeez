@@ -1,0 +1,40 @@
+<mongoChangeLog>
+
+    <changeSet changeId="SMS-1300" author="oleksii">
+        <script>
+
+            // clear collections
+            db.mongeez.remove({});
+            db.Asset.remove({});
+
+            // insert assets
+            common = {
+                className:"org.mongeez.examples.dto.Asset",
+                assetType: "PRIVATE_COMMONSTOCK",
+                status:"Approved",
+                ticker:"PIXR"
+            };
+            db.Asset.insert(common);
+
+
+            option = {
+                assetType: "PRIVATE_OPTIONS",
+                status:"Approved",
+                className:"org.mongeez.examples.dto.Asset",
+                expirationDate: new Date()
+            };
+            db.Asset.insert(option);
+
+
+            pref = {
+                className:"org.mongeez.examples.dto.Asset",
+                assetType: "PRIVATE_PREFFERED",
+                status:"Pending",
+                dividend: 5
+            };
+            db.Asset.insert(pref);
+
+        </script>
+    </changeSet>
+
+</mongoChangeLog>

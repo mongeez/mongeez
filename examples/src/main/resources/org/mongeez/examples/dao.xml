@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <bean id="mongoUri" class="com.mongodb.MongoURI">
+        <constructor-arg value="mongodb://localhost/assets"/>
+    </bean>
+    <bean id="mongo" class="com.mongodb.Mongo">
+        <constructor-arg ref="mongoUri"/>
+    </bean>
+
+    <bean id="mongeez" class="org.mongeez.MongeezRunner">
+        <property name="executeEnabled" value="true"/>
+        <property name="mongo" ref="mongo"/>
+        <property name="dbName" value="assets"/>
+        <property name="file" value="classpath:org/mongeez/examples/mongo/mongeez.xml"/>
+    </bean>
+
+    <!-- Morphia setup -->
+    <bean id="morphia" class="com.google.code.morphia.Morphia" depends-on="mongeez"/>
+
+    <bean id="mongoDatastore" factory-bean="morphia" factory-method="createDatastore">
+        <constructor-arg ref="mongo"/>
+        <constructor-arg value="assets"/>
+    </bean>
+</beans>
