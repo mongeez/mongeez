@@ -10,8 +10,8 @@ public abstract class Asset {
     @Id
     private String id;
 
-    private String assetType;
-    private String status;
+    private AssetType assetType;
+    private AssetStatus status;
 
     public String getId() {
         return id;
@@ -21,19 +21,19 @@ public abstract class Asset {
         this.id = id;
     }
 
-    public String getAssetType() {
+    public AssetType getAssetType() {
         return assetType;
     }
 
-    public void setAssetType(String assetType) {
+    public void setAssetType(AssetType assetType) {
         this.assetType = assetType;
     }
 
-    public String getStatus() {
+    public AssetStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(AssetStatus status) {
         this.status = status;
     }
 }

@@ -16,4 +16,11 @@
         </script>
     </changeSet>
 
+    <changeSet changeId="SMS-1353 capitalize enum values" author="oleksii">
+        <script>
+            db.Asset.update({"status":"Approved"}, {$set: {"status": "APPROVED"}}, false, true);
+            db.Asset.update({"status":"Pending"}, {$set: {"status": "PENDING"}}, false, true);
+        </script>
+    </changeSet>
+
 </mongoChangeLog>
