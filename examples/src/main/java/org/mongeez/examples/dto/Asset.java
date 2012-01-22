@@ -4,13 +4,13 @@ import com.google.code.morphia.annotations.Entity;
 import com.google.code.morphia.annotations.Id;
 import org.codehaus.jackson.annotate.JsonPropertyOrder;
 
-@JsonPropertyOrder({"id", "assetType", "status"})
+@JsonPropertyOrder({"id", "type", "status"})
 @Entity(value = "Asset", concern = "safe")
 public abstract class Asset {
     @Id
     private String id;
 
-    private AssetType assetType;
+    private AssetType type;
     private AssetStatus status;
 
     public String getId() {
@@ -21,12 +21,12 @@ public abstract class Asset {
         this.id = id;
     }
 
-    public AssetType getAssetType() {
-        return assetType;
+    public AssetType getType() {
+        return type;
     }
 
-    public void setAssetType(AssetType assetType) {
-        this.assetType = assetType;
+    public void setType(AssetType type) {
+        this.type = type;
     }
 
     public AssetStatus getStatus() {

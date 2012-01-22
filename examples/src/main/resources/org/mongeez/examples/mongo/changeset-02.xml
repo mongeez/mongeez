@@ -23,4 +23,10 @@
         </script>
     </changeSet>
 
+    <changeSet changeId="SMS-1353 rename assetType" author="oleksii">
+        <script>
+            db.Asset.update({}, {$rename: {"assetType": "type"}}, false, true);
+        </script>
+    </changeSet>
+
 </mongoChangeLog>
