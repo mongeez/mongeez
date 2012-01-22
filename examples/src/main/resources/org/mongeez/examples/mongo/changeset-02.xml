@@ -1,0 +1,19 @@
+<mongoChangeLog>
+
+    <changeSet changeId="SMS-1353 rename className" author="oleksii">
+        <script>
+            db.Asset.update({"assetType":"PRIVATE_PREFFERED"}, {$set: {"assetType": "PRIVATE_PREFERRED"}}, false, true);
+
+            var map = {
+                "PRIVATE_COMMONSTOCK": "org.mongeez.examples.dto.PrivateCommonStock",
+                "PRIVATE_OPTIONS": "org.mongeez.examples.dto.PrivateOption",
+                "PRIVATE_PREFERRED": "org.mongeez.examples.dto.PrivatePreferredStock"
+            };
+
+            for (var type in map) {
+                db.Asset.update({"assetType": type}, {$set: {"className": map[type]}}, false, true);
+            }
+        </script>
+    </changeSet>
+
+</mongoChangeLog>
