@@ -26,8 +26,8 @@ public class ChangeSetExecutor {
 
     private MongeezDao dao = null;
 
-    public ChangeSetExecutor(Mongo mongo, String dbName) {
-        dao = new MongeezDao(mongo, dbName);
+    public ChangeSetExecutor(Mongo mongo, String dbName, MongoAuth auth) {
+        dao = new MongeezDao(mongo, dbName, auth);
     }
 
     public void execute(List<ChangeSet> changeSets) {

@@ -18,13 +18,21 @@ import com.mongodb.DBCollection;
 import com.mongodb.Mongo;
 import com.mongodb.WriteConcern;
 import org.apache.commons.lang.time.DateFormatUtils;
+import org.mongeez.MongoAuth;
 import org.mongeez.commands.ChangeSet;
 
 public class MongeezDao {
+	
     private DB db;
+    private MongoAuth auth;
 
-    public MongeezDao(Mongo mongo, String databaseName) {
+    public MongeezDao(Mongo mongo, String databaseName, MongoAuth auth) {
+    	
         db = mongo.getDB(databaseName);
+        
+        if (auth != null){
+        	db.authenticate(auth.getUserName(), auth.getPassword().toCharArray());
+        }
 
         BasicDBObject keys = new BasicDBObject();
         keys.append("file", 1);

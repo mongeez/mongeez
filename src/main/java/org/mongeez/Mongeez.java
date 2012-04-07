@@ -30,12 +30,13 @@ public class Mongeez {
     private Mongo mongo = null;
     private String dbName;
     private Resource file = null;
+    private MongoAuth auth = null;
 
     private boolean isVerbose = false;
 
     public void process() {
         List<ChangeSet> changeSets = getChangeSets();
-        new ChangeSetExecutor(mongo, dbName).execute(changeSets);
+        new ChangeSetExecutor(mongo, dbName, auth).execute(changeSets);
     }
 
     private List<ChangeSet> getChangeSets() {
@@ -79,4 +80,13 @@ public class Mongeez {
             logger.setLevel(Level.TRACE);
         }
     }
+
+	public MongoAuth getAuth() {
+		return auth;
+	}
+
+	public void setAuth(MongoAuth auth) {
+		this.auth = auth;
+	}
+    
 }
