@@ -13,6 +13,7 @@
 package org.mongeez.reader;
 
 import org.apache.commons.digester.Digester;
+import org.apache.log4j.Logger;
 import org.mongeez.commands.ChangeSet;
 import org.mongeez.commands.ChangeSetList;
 import org.mongeez.commands.Script;
@@ -23,6 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class XmlChangeSetReader implements ChangeSetReader {
+    private static final Logger logger = Logger.getLogger(XmlChangeSetReader.class);
+
     private Digester digester;
 
     XmlChangeSetReader() {
@@ -56,9 +59,9 @@ public class XmlChangeSetReader implements ChangeSetReader {
             }
             changeSets.addAll(changeFileSet.getList());
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("IOException", e);
         } catch (org.xml.sax.SAXException e) {
-            e.printStackTrace();
+            logger.error("SAXException", e);
         }
 
         return changeSets;

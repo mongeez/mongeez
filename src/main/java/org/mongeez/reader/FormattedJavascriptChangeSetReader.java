@@ -12,6 +12,7 @@
 
 package org.mongeez.reader;
 
+import org.apache.log4j.Logger;
 import org.mongeez.commands.ChangeSet;
 import org.mongeez.commands.Script;
 import org.springframework.core.io.Resource;
@@ -39,6 +40,8 @@ public class FormattedJavascriptChangeSetReader implements ChangeSetReader {
             Pattern.compile(".*runAlways:(\\w+).*",
                     Pattern.CASE_INSENSITIVE);
 
+    private static final Logger logger = Logger.getLogger(FormattedJavascriptChangeSetReader.class);
+
     private final Charset cs;
 
     public FormattedJavascriptChangeSetReader() {
@@ -59,7 +62,7 @@ public class FormattedJavascriptChangeSetReader implements ChangeSetReader {
                 String line = reader.readLine();
                 return line != null && FILE_HEADER_PATTERN.matcher(line).matches();
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("IOException", e);
                 return false;
             } finally {
                 if (reader != null) {
@@ -79,9 +82,9 @@ public class FormattedJavascriptChangeSetReader implements ChangeSetReader {
         try {
             changeSets.addAll(parse(file));
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("IOException", e);
         } catch (ParseException e) {
-            e.printStackTrace();
+            logger.error("ParseException", e);
         }
 
         return changeSets;
