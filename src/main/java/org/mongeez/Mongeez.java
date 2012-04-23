@@ -17,11 +17,11 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.mongeez.commands.ChangeSet;
 import org.mongeez.commands.Script;
-import org.mongeez.reader.ChangeSetReader;
-import org.mongeez.reader.XmlChangeSetReader;
+import org.mongeez.reader.ChangeSetReaderFactory;
 import org.mongeez.reader.FilesetXMLReader;
 import org.springframework.core.io.Resource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -41,9 +41,12 @@ public class Mongeez {
 
     private List<ChangeSet> getChangeSets() {
         List<Resource> files = new FilesetXMLReader().getFiles(file);
+        List<ChangeSet> changeSets = new ArrayList<ChangeSet>();
 
-        ChangeSetReader changeSetsReader = new XmlChangeSetReader();
-        List<ChangeSet> changeSets = changeSetsReader.getChangeSets(files);
+        ChangeSetReaderFactory readerFactory = ChangeSetReaderFactory.getInstance();
+        for (Resource file : files) {
+            changeSets.addAll(readerFactory.getChangeSetReader(file).getChangeSets(file));
+        }
         logChangeSets(changeSets);
         return changeSets;
     }

@@ -50,13 +50,34 @@ public class FormattedJavascriptChangeSetReader implements ChangeSetReader {
     }
 
     @Override
-    public List<ChangeSet> getChangeSets(List<? extends Resource> files) {
+    public boolean supports(Resource file) {
+        if (file.getFilename().endsWith(".js")) {
+            BufferedReader reader = null;
+            try {
+                reader = new BufferedReader(new InputStreamReader(
+                        file.getInputStream()));
+                String line = reader.readLine();
+                return line != null && FILE_HEADER_PATTERN.matcher(line).matches();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            } finally {
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    } catch (IOException ignore) {}
+                }
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public List<ChangeSet> getChangeSets(Resource file) {
         List<ChangeSet> changeSets = new ArrayList<ChangeSet>();
 
         try {
-            for (Resource file : files) {
-                changeSets.addAll(parse(file));
-            }
+            changeSets.addAll(parse(file));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ParseException e) {

@@ -81,22 +81,16 @@ public class FormattedJavascriptChangeSetReaderTest {
 
     @Test
     public void testGetChangeSetsNoHeader() throws Exception {
-        List<ChangeSet> changeSets = parse("changeset1.js", "changeset_noheader.js", "changeset2.js");
-        // Current behavior is to ignore all changesets after the bad file
-        assertEquals(changeSets.size(), 2);
-        for (ChangeSet changeSet : changeSets) {
-            assertEquals(changeSet.getFile(), "changeset1.js");
-        }
+        List<ChangeSet> changeSets = parse("changeset_noheader.js");
+        // Current behavior is to ignore broken changeset files
+        assertEquals(changeSets.size(), 0);
     }
 
     @Test
     public void testGetChangeSetsEmptyScript() throws Exception {
-        List<ChangeSet> changeSets = parse("changeset1.js", "changeset_emptyscript.js", "changeset2.js");
-        // Current behavior is to ignore all changesets after the bad file
-        assertEquals(changeSets.size(), 2);
-        for (ChangeSet changeSet : changeSets) {
-            assertEquals(changeSet.getFile(), "changeset1.js");
-        }
+        List<ChangeSet> changeSets = parse("changeset_emptyscript.js");
+        // Current behavior is to ignore broken changeset files
+        assertEquals(changeSets.size(), 0);
     }
 
     @Test
@@ -155,19 +149,16 @@ public class FormattedJavascriptChangeSetReaderTest {
         assertEquals(changeSets.size(), 0);
     }
 
-    private List<ChangeSet> parse(String... fileNames) {
-        return parse(null, fileNames);
+    private List<ChangeSet> parse(String fileName) {
+        return parse(null, fileName);
     }
 
-    private List<ChangeSet> parse(Charset charset, String... fileNames) {
+    private List<ChangeSet> parse(Charset charset, String fileName) {
         FormattedJavascriptChangeSetReader reader = charset != null ?
                 new FormattedJavascriptChangeSetReader(charset) :
                 new FormattedJavascriptChangeSetReader();
-        List<Resource> files = new ArrayList<Resource>();
-        for (String fileName : fileNames) {
-            files.add(new ClassPathResource(fileName, getClass()));
-        }
-        List<ChangeSet> changeSets = reader.getChangeSets(files);
+        Resource file = new ClassPathResource(fileName, getClass());
+        List<ChangeSet> changeSets = reader.getChangeSets(file);
         return changeSets;
     }
 
