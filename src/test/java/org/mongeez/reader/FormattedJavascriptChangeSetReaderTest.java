@@ -16,7 +16,6 @@ import org.springframework.core.io.Resource;
 import org.testng.annotations.Test;
 
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.testng.Assert.assertEquals;
