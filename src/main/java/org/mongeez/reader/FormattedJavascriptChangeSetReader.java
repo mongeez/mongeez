@@ -106,10 +106,12 @@ public class FormattedJavascriptChangeSetReader implements ChangeSetReader {
                     scriptBody = new StringBuilder();
                     changeSet.setFile(file.getFilename());
                     changeSets.add(changeSet);
-                } else {
+                } else if (scriptBody != null) {
                     scriptBody.append(line);
                     scriptBody.append('\n');
-                }
+                } else if (!line.trim().isEmpty() && !line.startsWith(LINE_COMMENT)) {
+                    throw new ParseException(file + " has content outside of a changeset", 0);
+                } // Silently ignore whitespace-only and comment-only lines
                 line = reader.readLine();
             }
             addScriptToChangeSet(changeSet, scriptBody);
