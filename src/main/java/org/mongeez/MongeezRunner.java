@@ -28,13 +28,17 @@ public class MongeezRunner implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         if (isExecuteEnabled()) {
-            Mongeez mongeez = new Mongeez();
-            mongeez.setMongo(mongo);
-            mongeez.setDbName(dbName);
-            mongeez.setFile(file);
-
-            mongeez.process();
+            execute();
         }
+    }
+
+    public void execute() {
+        Mongeez mongeez = new Mongeez();
+        mongeez.setMongo(mongo);
+        mongeez.setDbName(dbName);
+        mongeez.setFile(file);
+
+        mongeez.process();
     }
 
     public boolean isExecuteEnabled() {
