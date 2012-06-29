@@ -17,7 +17,9 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.mongeez.commands.ChangeSet;
 import org.mongeez.commands.Script;
+import org.mongeez.reader.ChangeSetFileProvider;
 import org.mongeez.reader.ChangeSetReaderFactory;
+import org.mongeez.reader.FilesetXMLChangeSetFileProvider;
 import org.mongeez.reader.FilesetXMLReader;
 import org.springframework.core.io.Resource;
 
@@ -30,7 +32,7 @@ public class Mongeez {
 
     private Mongo mongo = null;
     private String dbName;
-    private Resource file = null;
+    private ChangeSetFileProvider changeSetFileProvider;
 
     private boolean isVerbose = false;
 
@@ -40,7 +42,7 @@ public class Mongeez {
     }
 
     private List<ChangeSet> getChangeSets() {
-        List<Resource> files = new FilesetXMLReader().getFiles(file);
+        List<Resource> files = changeSetFileProvider.getChangeSetFiles();
         List<ChangeSet> changeSets = new ArrayList<ChangeSet>();
 
         ChangeSetReaderFactory readerFactory = ChangeSetReaderFactory.getInstance();
@@ -73,8 +75,15 @@ public class Mongeez {
         this.dbName = dbName;
     }
 
+    /**
+     * Convenience method to set the ChangeSetFileProvider to an XML fileset based on the specified file
+     */
     public void setFile(Resource file) {
-        this.file = file;
+        setChangeSetFileProvider(new FilesetXMLChangeSetFileProvider(file));
+    }
+
+    public void setChangeSetFileProvider(ChangeSetFileProvider changeSetFileProvider) {
+        this.changeSetFileProvider = changeSetFileProvider;
     }
 
     public void setVerbose(boolean isVerbose) {

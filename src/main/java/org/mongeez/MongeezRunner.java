@@ -12,6 +12,7 @@
 package org.mongeez;
 
 import com.mongodb.Mongo;
+import org.mongeez.reader.ChangeSetFileProvider;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.Resource;
 
@@ -24,6 +25,7 @@ public class MongeezRunner implements InitializingBean {
     private Mongo mongo;
     private String dbName;
     private Resource file;
+    private ChangeSetFileProvider changeSetFileProvider;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -36,7 +38,11 @@ public class MongeezRunner implements InitializingBean {
         Mongeez mongeez = new Mongeez();
         mongeez.setMongo(mongo);
         mongeez.setDbName(dbName);
-        mongeez.setFile(file);
+        if (changeSetFileProvider != null) {
+            mongeez.setChangeSetFileProvider(changeSetFileProvider);
+        } else {
+            mongeez.setFile(file);
+        }
 
         mongeez.process();
     }
