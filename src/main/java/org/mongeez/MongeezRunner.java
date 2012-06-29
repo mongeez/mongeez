@@ -66,4 +66,8 @@ public class MongeezRunner implements InitializingBean {
     public void setFile(Resource file) {
         this.file = file;
     }
+
+    public void setChangeSetFileProvider(ChangeSetFileProvider changeSetFileProvider) {
+        this.changeSetFileProvider = changeSetFileProvider;
+    }
 }
