@@ -70,4 +70,8 @@ public class MongeezRunner implements InitializingBean {
     public void setChangeSetFileProvider(ChangeSetFileProvider changeSetFileProvider) {
         this.changeSetFileProvider = changeSetFileProvider;
     }
+
+    public String getDbName() {
+        return dbName;
+    }
 }
