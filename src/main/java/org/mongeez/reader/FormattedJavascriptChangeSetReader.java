@@ -92,7 +92,9 @@ public class FormattedJavascriptChangeSetReader implements ChangeSetReader {
                     scriptBody.append(line);
                     scriptBody.append('\n');
                 } else if (!line.trim().isEmpty() && !line.startsWith(LINE_COMMENT)) {
-                    throw new ParseException(file + " has content outside of a changeset", 0);
+                    throw new ParseException(file + " has content outside of a changeset.  " +
+                            "To start a changeset, add a comment in the format:\n" +
+                            LINE_COMMENT + "changeset author:id", 0);
                 } // Silently ignore whitespace-only and comment-only lines
                 line = reader.readLine();
             }
