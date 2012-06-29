@@ -52,25 +52,7 @@ public class FormattedJavascriptChangeSetReader implements ChangeSetReader {
 
     @Override
     public boolean supports(Resource file) {
-        if (file.getFilename().endsWith(".js")) {
-            BufferedReader reader = null;
-            try {
-                reader = new BufferedReader(new InputStreamReader(
-                        file.getInputStream()));
-                String line = reader.readLine();
-                return line != null && FILE_HEADER_PATTERN.matcher(line).matches();
-            } catch (IOException e) {
-                logger.error("IOException", e);
-                return false;
-            } finally {
-                if (reader != null) {
-                    try {
-                        reader.close();
-                    } catch (IOException ignore) {}
-                }
-            }
-        }
-        return false;
+        return file.getFilename().endsWith(".js");
     }
 
     @Override
