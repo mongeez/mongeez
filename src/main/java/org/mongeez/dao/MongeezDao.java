@@ -15,11 +15,14 @@ package org.mongeez.dao;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
 import com.mongodb.Mongo;
+import com.mongodb.QueryBuilder;
 import com.mongodb.WriteConcern;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.mongeez.commands.ChangeSet;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MongeezDao {
@@ -28,8 +31,53 @@ public class MongeezDao {
 
     public MongeezDao(Mongo mongo, String databaseName) {
         db = mongo.getDB(databaseName);
+        configure();
+    }
 
+    private void configure() {
+        addTypeToUntypedRecords();
+        loadConfigurationRecord();
+        ensureChangeSetExecutionIndex();
+    }
+
+    private void addTypeToUntypedRecords() {
+        DBObject q = new QueryBuilder().put("type").exists(false).get();
+        BasicDBObject o = new BasicDBObject("$set", new BasicDBObject("type", RecordType.changeSetExecution.name()));
+        getMongeezCollection().update(q, o, false, true, WriteConcern.SAFE);
+    }
+
+    private void loadConfigurationRecord() {
+        DBObject q = new QueryBuilder().put("type").is(RecordType.configuration.name()).get();
+        DBObject configRecord = getMongeezCollection().findOne(q);
+        if (configRecord == null) {
+            if (getMongeezCollection().count() > 0L) {
+                // We have pre-existing records, so don't assume that they support the latest features
+                configRecord =
+                        new BasicDBObject()
+                                .append("type", RecordType.configuration.name())
+                                .append("supportResourcePath", false);
+            } else {
+                configRecord =
+                        new BasicDBObject()
+                                .append("type", RecordType.configuration.name())
+                                .append("supportResourcePath", true);
+            }
+            getMongeezCollection().insert(configRecord, WriteConcern.SAFE);
+        }
+        Object supportResourcePath = configRecord.get("supportResourcePath");
+
+        changeSetAttributes = new ArrayList<ChangeSetAttribute>();
+        changeSetAttributes.add(ChangeSetAttribute.file);
+        changeSetAttributes.add(ChangeSetAttribute.changeId);
+        changeSetAttributes.add(ChangeSetAttribute.author);
+        if (Boolean.TRUE.equals(supportResourcePath)) {
+            changeSetAttributes.add(ChangeSetAttribute.resourcePath);
+        }
+    }
+
+    private void ensureChangeSetExecutionIndex() {
         BasicDBObject keys = new BasicDBObject();
+        keys.append("type", RecordType.changeSetExecution.name());
         for (ChangeSetAttribute attribute : changeSetAttributes) {
             keys.append(attribute.name(), 1);
         }
@@ -38,6 +86,7 @@ public class MongeezDao {
 
     public boolean wasExecuted(ChangeSet changeSet) {
         BasicDBObject query = new BasicDBObject();
+        query.append("type", RecordType.changeSetExecution.name());
         for (ChangeSetAttribute attribute : changeSetAttributes) {
             query.append(attribute.name(), attribute.getAttributeValue(changeSet));
         }
@@ -54,6 +103,7 @@ public class MongeezDao {
 
     public void logChangeSet(ChangeSet changeSet) {
         BasicDBObject object = new BasicDBObject();
+        object.append("type", RecordType.changeSetExecution.name());
         for (ChangeSetAttribute attribute : changeSetAttributes) {
             object.append(attribute.name(), attribute.getAttributeValue(changeSet));
         }

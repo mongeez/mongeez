@@ -55,7 +55,7 @@ public class XmlChangeSetReader implements ChangeSetReader {
         try {
             ChangeSetList changeFileSet = (ChangeSetList) digester.parse(file.getInputStream());
             for (ChangeSet changeSet : changeFileSet.getList()) {
-                changeSet.setFile(file.getFilename());
+                ChangeSetReaderUtil.populateChangeSetResourceInfo(changeSet, file);
             }
             changeSets.addAll(changeFileSet.getList());
         } catch (IOException e) {

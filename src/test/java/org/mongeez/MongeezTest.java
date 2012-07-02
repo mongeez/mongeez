@@ -49,7 +49,7 @@ public class MongeezTest {
 
         mongeez.process();
 
-        assertEquals(db.getCollection("mongeez").count(), 4);
+        assertEquals(db.getCollection("mongeez").count(), 5);
 
         assertEquals(db.getCollection("organization").count(), 2);
         assertEquals(db.getCollection("user").count(), 2);
@@ -66,6 +66,6 @@ public class MongeezTest {
         Mongeez mongeez = create("mongeez_empty.xml");
         mongeez.process();
 
-        assertEquals(db.getCollection("mongeez").count(), 0);
+        assertEquals(db.getCollection("mongeez").count(), 1);
     }
 }

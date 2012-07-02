@@ -19,6 +19,7 @@ public class ChangeSet {
     private String changeId;
     private String author;
     private String file;
+    private String resourcePath;
 
     private boolean runAlways;
 
@@ -54,6 +55,14 @@ public class ChangeSet {
 
     public void setFile(String file) {
         this.file = file;
+    }
+
+    public String getResourcePath() {
+        return resourcePath;
+    }
+
+    public void setResourcePath(String resourcePath) {
+        this.resourcePath = resourcePath;
     }
 
     public void add(Script command) {

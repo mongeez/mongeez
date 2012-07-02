@@ -86,7 +86,7 @@ public class FormattedJavascriptChangeSetReader implements ChangeSetReader {
                     addScriptToChangeSet(changeSet, scriptBody);
                     changeSet = newChangeSet;
                     scriptBody = new StringBuilder();
-                    changeSet.setFile(file.getFilename());
+                    ChangeSetReaderUtil.populateChangeSetResourceInfo(changeSet, file);
                     changeSets.add(changeSet);
                 } else if (scriptBody != null) {
                     scriptBody.append(line);

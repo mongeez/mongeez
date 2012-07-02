@@ -27,6 +27,10 @@ public enum ChangeSetAttribute {
         String getAttributeValue(ChangeSet changeSet) {
             return changeSet.getAuthor();
         }
+    }, resourcePath() {
+        String getAttributeValue(ChangeSet changeSet) {
+            return changeSet.getResourcePath();
+        }
     };
 
     abstract String getAttributeValue(ChangeSet changeSet);
