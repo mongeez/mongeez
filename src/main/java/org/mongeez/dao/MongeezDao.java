@@ -20,25 +20,27 @@ import com.mongodb.WriteConcern;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.mongeez.commands.ChangeSet;
 
+import java.util.List;
+
 public class MongeezDao {
     private DB db;
+    private List<ChangeSetAttribute> changeSetAttributes;
 
     public MongeezDao(Mongo mongo, String databaseName) {
         db = mongo.getDB(databaseName);
 
         BasicDBObject keys = new BasicDBObject();
-        keys.append("file", 1);
-        keys.append("changeId", 1);
-        keys.append("author", 1);
+        for (ChangeSetAttribute attribute : changeSetAttributes) {
+            keys.append(attribute.name(), 1);
+        }
         getMongeezCollection().ensureIndex(keys);
     }
 
     public boolean wasExecuted(ChangeSet changeSet) {
         BasicDBObject query = new BasicDBObject();
-        query.append("file", changeSet.getFile());
-        query.append("changeId", changeSet.getChangeId());
-        query.append("author", changeSet.getAuthor());
-
+        for (ChangeSetAttribute attribute : changeSetAttributes) {
+            query.append(attribute.name(), attribute.getAttributeValue(changeSet));
+        }
         return getMongeezCollection().count(query) > 0;
     }
 
@@ -52,11 +54,10 @@ public class MongeezDao {
 
     public void logChangeSet(ChangeSet changeSet) {
         BasicDBObject object = new BasicDBObject();
-        object.append("file", changeSet.getFile());
-        object.append("changeId", changeSet.getChangeId());
-        object.append("author", changeSet.getAuthor());
+        for (ChangeSetAttribute attribute : changeSetAttributes) {
+            object.append(attribute.name(), attribute.getAttributeValue(changeSet));
+        }
         object.append("date", DateFormatUtils.ISO_DATETIME_TIME_ZONE_FORMAT.format(System.currentTimeMillis()));
-
         getMongeezCollection().insert(object, WriteConcern.SAFE);
     }
 }
