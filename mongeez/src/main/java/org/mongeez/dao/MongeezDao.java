@@ -12,6 +12,13 @@
 
 package org.mongeez.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.time.DateFormatUtils;
+import org.mongeez.MongoAuth;
+import org.mongeez.commands.ChangeSet;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -19,18 +26,20 @@ import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.QueryBuilder;
 import com.mongodb.WriteConcern;
-import org.apache.commons.lang.time.DateFormatUtils;
-import org.mongeez.commands.ChangeSet;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MongeezDao {
     private DB db;
+    private MongoAuth auth;
     private List<ChangeSetAttribute> changeSetAttributes;
 
-    public MongeezDao(Mongo mongo, String databaseName) {
+    public MongeezDao(Mongo mongo, String databaseName, MongoAuth auth) {
+        this.auth = auth;
         db = mongo.getDB(databaseName);
+        
+        if (this.auth != null){
+            db.authenticate(this.auth.getUserName(), this.auth.getPassword().toCharArray());
+        }
+        
         configure();
     }
 

@@ -11,10 +11,12 @@
  */
 package org.mongeez;
 
-import com.mongodb.Mongo;
+import org.apache.commons.lang.StringUtils;
 import org.mongeez.reader.ChangeSetFileProvider;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.Resource;
+
+import com.mongodb.Mongo;
 
 /**
  * @author oleksii
@@ -26,9 +28,12 @@ public class MongeezRunner implements InitializingBean {
     private String dbName;
     private Resource file;
     private ChangeSetFileProvider changeSetFileProvider;
+    private String userName;
+    private String passWord;
 
     @Override
     public void afterPropertiesSet() throws Exception {
+    	
         if (isExecuteEnabled()) {
             execute();
         }
@@ -42,6 +47,11 @@ public class MongeezRunner implements InitializingBean {
             mongeez.setChangeSetFileProvider(changeSetFileProvider);
         } else {
             mongeez.setFile(file);
+        }
+        
+        if(!StringUtils.isEmpty(userName) && !StringUtils.isEmpty(passWord)){
+            MongoAuth auth = new MongoAuth(userName, passWord);
+            mongeez.setAuth(auth);
         }
 
         mongeez.process();
@@ -74,4 +84,13 @@ public class MongeezRunner implements InitializingBean {
     public String getDbName() {
         return dbName;
     }
+
+    public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public void setPassWord(String passWord) {
+		this.passWord = passWord;
+	}
+    
 }

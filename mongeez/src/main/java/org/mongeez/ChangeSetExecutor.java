@@ -12,13 +12,14 @@
 
 package org.mongeez;
 
-import com.mongodb.Mongo;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.mongeez.commands.ChangeSet;
 import org.mongeez.commands.Script;
 import org.mongeez.dao.MongeezDao;
 
-import java.util.List;
+import com.mongodb.Mongo;
 
 
 public class ChangeSetExecutor {
@@ -26,8 +27,8 @@ public class ChangeSetExecutor {
 
     private MongeezDao dao = null;
 
-    public ChangeSetExecutor(Mongo mongo, String dbName) {
-        dao = new MongeezDao(mongo, dbName);
+    public ChangeSetExecutor(Mongo mongo, String dbName, MongoAuth auth) {
+        dao = new MongeezDao(mongo, dbName, auth);
     }
 
     public void execute(List<ChangeSet> changeSets) {

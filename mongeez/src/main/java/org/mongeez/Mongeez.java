@@ -12,7 +12,9 @@
 
 package org.mongeez;
 
-import com.mongodb.Mongo;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.mongeez.commands.ChangeSet;
@@ -20,11 +22,9 @@ import org.mongeez.commands.Script;
 import org.mongeez.reader.ChangeSetFileProvider;
 import org.mongeez.reader.ChangeSetReaderFactory;
 import org.mongeez.reader.FilesetXMLChangeSetFileProvider;
-import org.mongeez.reader.FilesetXMLReader;
 import org.springframework.core.io.Resource;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.mongodb.Mongo;
 
 
 public class Mongeez {
@@ -33,12 +33,14 @@ public class Mongeez {
     private Mongo mongo = null;
     private String dbName;
     private ChangeSetFileProvider changeSetFileProvider;
+    private Resource file = null;
+    private MongoAuth auth = null;
 
     private boolean isVerbose = false;
 
     public void process() {
         List<ChangeSet> changeSets = getChangeSets();
-        new ChangeSetExecutor(mongo, dbName).execute(changeSets);
+        new ChangeSetExecutor(mongo, dbName, auth).execute(changeSets);
     }
 
     private List<ChangeSet> getChangeSets() {
@@ -92,4 +94,13 @@ public class Mongeez {
             logger.setLevel(Level.TRACE);
         }
     }
+
+	public MongoAuth getAuth() {
+		return auth;
+	}
+
+	public void setAuth(MongoAuth auth) {
+		this.auth = auth;
+	}
+    
 }
