@@ -12,6 +12,7 @@ messages.log
 *.iws
 
 # eclipse files
-.classpath
 .project
 .settings/
+.classpath
+.springBeans
