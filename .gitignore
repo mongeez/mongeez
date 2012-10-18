@@ -1,5 +1,5 @@
 # maven files
-/*/target
+target/
 
 # test logs
 test-output
@@ -9,4 +9,10 @@ messages.log
 .idea
 *.iml
 *.ipr
-*.iws
+*.iwso
+
+# eclipse files
+.project
+.settings/
+.classpath
+.springBeans
