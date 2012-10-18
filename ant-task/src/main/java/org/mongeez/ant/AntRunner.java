@@ -10,14 +10,24 @@ public class AntRunner extends Task {
     private boolean executeEnabled = false;
     private String dbName;
 	private String host;
-	private String port;
+	private String userName;
+	private String passWord;
+	private Integer port;
 	private String filePath;
 
     // The method executing the task
     public void execute() throws BuildException {
     	Mongeez mongeez = new Mongeez();
     	mongeez.setFile(new ClassPathResource(filePath));
-    	mongeez.setMongo(new Mongo(host, port));
+    	try {
+            mongeez.setMongo(new Mongo(host, port));
+            if(!StringUtils.isEmpty(userName) && !StringUtils.isEmpty(passWord)){
+                MongoAuth auth = new MongoAuth(userName, passWord);
+                mongeez.setAuth(auth);
+            }
+        } catch (UnknownHostException e) {
+            throw new BuildException(e);
+        }
     	mongeez.setDbName(dbName);
     	mongeez.process();
     }
@@ -40,5 +50,12 @@ public class AntRunner extends Task {
 
 	public void setFilePath(String filePath) {
 		this.filePath = filePath;
+	}
+    public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public void setPassWord(String passWord) {
+		this.passWord = passWord;
 	}
 }
