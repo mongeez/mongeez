@@ -4,7 +4,7 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.mongeez.Mongo;
 import org.mongeez.Resource;
-import org.mongeez.reader.ChangeSetFileProvider;
+import org.springframework.core.io.ClassPathResource;
 
 public class AntRunner extends Task {
     private boolean executeEnabled = false;
