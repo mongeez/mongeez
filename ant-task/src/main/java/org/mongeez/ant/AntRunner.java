@@ -2,9 +2,9 @@ package org.mongeez.ant;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
-import org.mongeez.Mongo;
-import org.mongeez.Resource;
-import org.springframework.core.io.ClassPathResource;
+import org.mongeez.Mongeez;
+
+import com.mongodb.Mongo;
 
 public class AntRunner extends Task {
     private boolean executeEnabled = false;

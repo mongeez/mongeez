@@ -7,7 +7,6 @@
         <version>0.9.2-SNAPSHOT</version>
     </parent>
     
-    <groupId>org.mongeez</groupId>
     <artifactId>mongeez-ant</artifactId>
     <packaging>jar</packaging>
 
@@ -36,6 +35,12 @@
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
             <version>2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.ant</groupId>
+            <artifactId>ant-nodeps</artifactId>
+            <version>1.8.1</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
     
