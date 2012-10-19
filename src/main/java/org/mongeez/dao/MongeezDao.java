@@ -30,6 +30,10 @@ public class MongeezDao {
     private DB db;
     private List<ChangeSetAttribute> changeSetAttributes;
 
+    public MongeezDao(Mongo mongo, String databaseName) {
+        this(mongo, databaseName, null);
+    }
+
     public MongeezDao(Mongo mongo, String databaseName, MongoAuth auth) {
         db = mongo.getDB(databaseName);
         if (auth != null){
@@ -81,7 +85,6 @@ public class MongeezDao {
 
     private void ensureChangeSetExecutionIndex() {
         BasicDBObject keys = new BasicDBObject();
-        keys.append("file", 1); //todo why?
         keys.append("type", RecordType.changeSetExecution.name());
         for (ChangeSetAttribute attribute : changeSetAttributes) {
             keys.append(attribute.name(), 1);
