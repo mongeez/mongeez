@@ -20,6 +20,7 @@ import com.mongodb.Mongo;
 import com.mongodb.QueryBuilder;
 import com.mongodb.WriteConcern;
 import org.apache.commons.lang.time.DateFormatUtils;
+import org.mongeez.MongoAuth;
 import org.mongeez.commands.ChangeSet;
 
 import java.util.ArrayList;
@@ -29,8 +30,11 @@ public class MongeezDao {
     private DB db;
     private List<ChangeSetAttribute> changeSetAttributes;
 
-    public MongeezDao(Mongo mongo, String databaseName) {
+    public MongeezDao(Mongo mongo, String databaseName, MongoAuth auth) {
         db = mongo.getDB(databaseName);
+        if (auth != null){
+        	db.authenticate(auth.getUsername(), auth.getPassword().toCharArray());
+        }
         configure();
     }
 
@@ -77,6 +81,7 @@ public class MongeezDao {
 
     private void ensureChangeSetExecutionIndex() {
         BasicDBObject keys = new BasicDBObject();
+        keys.append("file", 1); //todo why?
         keys.append("type", RecordType.changeSetExecution.name());
         for (ChangeSetAttribute attribute : changeSetAttributes) {
             keys.append(attribute.name(), 1);
