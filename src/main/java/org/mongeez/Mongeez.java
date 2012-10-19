@@ -20,7 +20,6 @@ import org.mongeez.commands.Script;
 import org.mongeez.reader.ChangeSetFileProvider;
 import org.mongeez.reader.ChangeSetReaderFactory;
 import org.mongeez.reader.FilesetXMLChangeSetFileProvider;
-import org.mongeez.reader.FilesetXMLReader;
 import org.springframework.core.io.Resource;
 
 import java.util.ArrayList;
@@ -32,13 +31,14 @@ public class Mongeez {
 
     private Mongo mongo = null;
     private String dbName;
+    private MongoAuth auth = null;
     private ChangeSetFileProvider changeSetFileProvider;
 
     private boolean isVerbose = false;
 
     public void process() {
         List<ChangeSet> changeSets = getChangeSets();
-        new ChangeSetExecutor(mongo, dbName).execute(changeSets);
+        new ChangeSetExecutor(mongo, dbName, auth).execute(changeSets);
     }
 
     private List<ChangeSet> getChangeSets() {
@@ -73,6 +73,10 @@ public class Mongeez {
 
     public void setDbName(String dbName) {
         this.dbName = dbName;
+    }
+
+    public void setAuth(MongoAuth auth) {
+        this.auth = auth;
     }
 
     /**
