@@ -3,6 +3,9 @@ package org.mongeez.ant;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.mongeez.Mongeez;
+import org.springframework.core.io.ClassPathResource;
+import org.mongeez.MongoAuth;
+import org.apache.commons.lang.StringUtils;
 
 import com.mongodb.Mongo;
 
