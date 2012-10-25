@@ -114,13 +114,16 @@
 	</build>
 
 	<distributionManagement>
-		<snapshotRepository>
-			<id>sonatype-nexus-snapshots</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-		<repository>
-			<id>sonatype-nexus-staging</id>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-		</repository>
+ 	 	        <downloadUrl>http://rumba.ci.dev.pearsoncmg.com/nexus/content/repositories/internal/</downloadUrl>
+	 	        <repository>
+	 	            <id>rumba.release</id>
+	 	            <name>RUMBA Release Repository</name>
+	 	            <url>http://rumba.ci.dev.pearsoncmg.com/nexus/content/repositories/internal/</url>
+	 	        </repository>
+ 	        <snapshotRepository>
+	 	            <id>rumba.snapshots</id>
+	 	            <name>RUMBA Snapshots Repository</name>
+	 	            <url>http://rumba.ci.dev.pearsoncmg.com/nexus/content/repositories/snapshots/</url>
+	    </snapshotRepository>
 	</distributionManagement>
 </project>
