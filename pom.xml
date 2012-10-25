@@ -32,10 +32,11 @@
 	</licenses>
 
 	<scm>
-		<connection>scm:git:git@github.com:secondmarket/mongeez.git</connection>
-		<developerConnection>scm:git:git@github.com:secondmarket/mongeez.git</developerConnection>
-		<url>git@github.com:secondmarket/mongeez.git</url>
-	</scm>
+        <connection>scm:git:http://rumba.ci.dev.pearsoncmg.com/gitblit/git/third-party/mongeez.git</connection>
+        <developerConnection>scm:git:http://rumba.ci.dev.pearsoncmg.com/gitblit/git/third-party/mongeez.git</developerConnection>
+        <url>http://rumba.ci.dev.pearsoncmg.com/gitblit/summary/?r=third-party/mongeez.git</url>
+    </scm>
+
 
 	<developers>
 		<developer>

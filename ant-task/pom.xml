@@ -56,7 +56,7 @@
     </dependencies>
 
     <build>
-        <plugins>
+      <!--   <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
@@ -84,12 +84,12 @@
                     <execution>
                         <id>start</id>
                         <goals>
-                            <goal>start</goal> <!-- use the 'run' goal instead to start mongodb and wait -->
+                            <goal>start</goal>
                         </goals>
                         <configuration>
                             <port>${mongodb.it.host.port}</port>
                             <version>2.0.5</version>
-                            <databaseDirectory>${project.build.directory}/mongodata</databaseDirectory>  <!-- optional, default is a new dir in java.io.tmpdir -->
+                            <databaseDirectory>${project.build.directory}/mongodata</databaseDirectory>  
                             <bindIp>127.0.0.1</bindIp>
                         </configuration>
                     </execution>
@@ -108,7 +108,7 @@
                     </dependency>
                 </dependencies>
             </plugin>
-        </plugins>
+        </plugins> --> <!-- use the 'run' goal instead to start mongodb and wait --><!-- optional, default is a new dir in java.io.tmpdir -->
         <pluginManagement>
             <plugins>
                 <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
