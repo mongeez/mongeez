@@ -1,8 +1,12 @@
 package org.mongeez.ant;
 
+import java.net.UnknownHostException;
+
+import org.apache.commons.lang.StringUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.mongeez.Mongeez;
+import org.mongeez.MongoAuth;
 import org.springframework.core.io.ClassPathResource;
 import org.mongeez.MongoAuth;
 import org.apache.commons.lang.StringUtils;
