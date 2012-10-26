@@ -27,19 +27,26 @@ public class AntRunner extends Task {
 		System.out.println("using following configs: dbName:"+ dbName +" host:" 
 			+  " userName:" + userName + " passWord:" + " filePath:" + filePath 
 			+ " port:" + port);
-    	Mongeez mongeez = new Mongeez();
-    	mongeez.setFile(new ClassPathResource(filePath));
-    	try {
-            mongeez.setMongo(new Mongo(host, port));
-            if(!StringUtils.isEmpty(userName) && !StringUtils.isEmpty(passWord)){
-                MongoAuth auth = new MongoAuth(userName, passWord);
-                mongeez.setAuth(auth);
-            }
-        } catch (UnknownHostException e) {
-            throw new BuildException(e);
-        }
-    	mongeez.setDbName(dbName);
-    	mongeez.process();
+		if (StringUtils.isNotBlank(host) && StringUtils.isNotBlank(filePath))
+		{
+			Mongeez mongeez = new Mongeez();
+			mongeez.setFile(new ClassPathResource(filePath));
+			try {
+				mongeez.setMongo(new Mongo(host, port));
+				if(StringUtils.isNotBlank(userName) && StringUtils.isNotBlank(passWord)){
+					MongoAuth auth = new MongoAuth(userName, passWord);
+					mongeez.setAuth(auth);
+				}
+			} catch (UnknownHostException e) {
+				throw new BuildException(e);
+			}
+			mongeez.setDbName(dbName);
+			mongeez.process();
+		}
+		else
+		{
+			System.err.print("Host and FilePath is required");
+		}
     }
 
 	public void setExecuteEnabled(boolean executeEnabled) {
