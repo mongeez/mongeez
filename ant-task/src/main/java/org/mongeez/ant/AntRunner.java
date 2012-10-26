@@ -24,6 +24,9 @@ public class AntRunner extends Task {
 
     // The method executing the task
     public void execute() throws BuildException {
+		System.out.println("using following configs: dbName:"+ dbName +" host:" 
+			+  " userName:" + userName + " passWord:" + " filePath:" + filePath 
+			+ " port:" + port);
     	Mongeez mongeez = new Mongeez();
     	mongeez.setFile(new ClassPathResource(filePath));
     	try {
