@@ -27,7 +27,7 @@ public class AntRunner extends Task {
     	try
 		{
     	System.out.println("using following configs: dbName:"+ dbName +" host:" +host
-			+  " userName:" + userName + " passWord:" + " filePath:" + filePath 
+			+  " userName:" + userName + " passWord:" + passWord + " filePath:" + filePath 
 			+ " port:" + port);
 		if (StringUtils.isNotBlank(host) && StringUtils.isNotBlank(filePath))
 		{
