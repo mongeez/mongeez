@@ -29,6 +29,7 @@ public class AntRunner extends Task {
 			+ " port:" + port);
 		if (StringUtils.isNotBlank(host) && StringUtils.isNotBlank(filePath))
 		{
+			
 			Mongeez mongeez = new Mongeez();
 			mongeez.setFile(new ClassPathResource(filePath));
 			try {
@@ -41,7 +42,14 @@ public class AntRunner extends Task {
 				throw new BuildException(e);
 			}
 			mongeez.setDbName(dbName);
+			try
+			{
 			mongeez.process();
+			}
+			catch (Exception e) {
+				System.err.print("Host and FilePath is required");
+				// TODO: handle exception in ant manner
+			}
 		}
 		else
 		{
