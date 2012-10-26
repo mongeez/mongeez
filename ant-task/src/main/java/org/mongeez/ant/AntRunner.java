@@ -23,8 +23,10 @@ public class AntRunner extends Task {
 	private String filePath;
 
     // The method executing the task
-    public void execute() throws BuildException {
-		System.out.println("using following configs: dbName:"+ dbName +" host:" 
+    public void execute() {
+    	try
+		{
+    	System.out.println("using following configs: dbName:"+ dbName +" host:" +host
 			+  " userName:" + userName + " passWord:" + " filePath:" + filePath 
 			+ " port:" + port);
 		if (StringUtils.isNotBlank(host) && StringUtils.isNotBlank(filePath))
@@ -42,18 +44,17 @@ public class AntRunner extends Task {
 				throw new BuildException(e);
 			}
 			mongeez.setDbName(dbName);
-			try
-			{
 			mongeez.process();
-			}
-			catch (Exception e) {
-				System.err.print("Host and FilePath is required : " + e.getMessage());
-				// TODO: handle exception in ant manner
-			}
+			
 		}
 		else
 		{
 			System.err.print("Host and FilePath is required");
+		}
+		}
+		catch (Exception e) {
+			System.err.print("Host and FilePath is required : " + e.getMessage());
+			// TODO: handle exception in ant manner
 		}
     }
 
