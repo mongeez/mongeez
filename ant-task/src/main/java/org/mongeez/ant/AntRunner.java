@@ -47,7 +47,7 @@ public class AntRunner extends Task {
 			mongeez.process();
 			}
 			catch (Exception e) {
-				System.err.print("Host and FilePath is required");
+				System.err.print("Host and FilePath is required : " + e.getMessage());
 				// TODO: handle exception in ant manner
 			}
 		}
