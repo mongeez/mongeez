@@ -53,7 +53,7 @@ public class MongeezRunner extends Task {
 		}
 		}
 		catch (Exception e) {
-			System.err.print("Host and FilePath is required : " + e.getMessage());
+			System.err.print("Exception Occured: " + e.getMessage());
 			// TODO: handle exception in ant manner
 		}
     }
