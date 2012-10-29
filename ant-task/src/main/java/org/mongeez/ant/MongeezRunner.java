@@ -7,7 +7,7 @@ import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.mongeez.Mongeez;
 import org.mongeez.MongoAuth;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 
 import com.mongodb.Mongo;
 import com.mongodb.MongoOptions;
@@ -33,7 +33,7 @@ public class MongeezRunner extends Task {
 		{
 			
 			Mongeez mongeez = new Mongeez();
-			mongeez.setFile(new ClassPathResource(filePath));
+			mongeez.setFile(new FileSystemResource(filePath));
 			try {
 				mongeez.setMongo(new Mongo(host, port));
 				if(StringUtils.isNotBlank(userName) && StringUtils.isNotBlank(passWord)){
