@@ -8,19 +8,19 @@ import org.apache.tools.ant.Task;
 import org.mongeez.Mongeez;
 import org.mongeez.MongoAuth;
 import org.springframework.core.io.ClassPathResource;
-import org.mongeez.MongoAuth;
-import org.apache.commons.lang.StringUtils;
 
 import com.mongodb.Mongo;
+import com.mongodb.MongoOptions;
+import com.mongodb.ServerAddress;
 
-public class AntRunner extends Task {
-    private boolean executeEnabled = false;
+public class MongeezRunner extends Task {
     private String dbName;
 	private String host;
 	private String userName;
 	private String passWord;
 	private Integer port;
 	private String filePath;
+	private boolean writeSave = true;
 
     // The method executing the task
     public void execute() {
@@ -58,10 +58,6 @@ public class AntRunner extends Task {
 		}
     }
 
-	public void setExecuteEnabled(boolean executeEnabled) {
-		this.executeEnabled = executeEnabled;
-	}
-
 	public void setDbName(String dbName) {
 		this.dbName = dbName;
 	}
@@ -83,5 +79,9 @@ public class AntRunner extends Task {
 
 	public void setPassWord(String passWord) {
 		this.passWord = passWord;
+	}
+	
+	public void setWriteSafe(boolean writeSafe) {
+	    this.writeSave = writeSafe;
 	}
 }
