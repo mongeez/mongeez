@@ -84,7 +84,7 @@ public class MongeezRunnerTest {
         antTask.setHost("localhost");
         antTask.setPort(mongoPort);
         antTask.setDbName("unittest");
-        antTask.setFilePath("mongeez_test1.xml");
+        antTask.setFilePath("target/test-classes/mongeez_test1.xml");
         antTask.execute();
         
         // check the results
@@ -163,7 +163,7 @@ public class MongeezRunnerTest {
         antTask.setHost("localhost");
         antTask.setPort(mongoPort);
         antTask.setDbName("unittest");
-        antTask.setFilePath("mongeez_test2.xml");
+        antTask.setFilePath("target/test-classes/mongeez_test2.xml");
         antTask.execute();
         
         // check the results
