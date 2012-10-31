@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,7 +27,10 @@ import de.flapdoodle.embed.mongo.MongodExecutable;
 import de.flapdoodle.embed.mongo.MongodProcess;
 import de.flapdoodle.embed.mongo.MongodStarter;
 import de.flapdoodle.embed.mongo.config.MongodConfig;
+import de.flapdoodle.embed.mongo.config.RuntimeConfig;
 import de.flapdoodle.embed.mongo.distribution.Version;
+import de.flapdoodle.embed.process.extract.ITempNaming;
+import de.flapdoodle.embed.process.io.directories.IDirectory;
 
 public class MongeezRunnerTest {
     private static MongodExecutable mongodExe;
@@ -35,7 +39,23 @@ public class MongeezRunnerTest {
     
     @BeforeClass
     public static void setUpMongod() throws Exception {
-        MongodStarter runtime = MongodStarter.getDefaultInstance();
+        IDirectory mvnBuildPath = new IDirectory() {
+            @Override
+            public File asFile() {
+                String currentDir = System.getProperty("user.dir");
+                return new File(currentDir, "target");
+            }
+        };
+        ITempNaming mvnMongoNamer = new ITempNaming() {
+            @Override
+            public String nameFor(String prefix, String postfix) {
+                return prefix + postfix;
+            }
+        };
+        RuntimeConfig runtimeConfig = new RuntimeConfig();
+        runtimeConfig.setTempDirFactory(mvnBuildPath);
+        runtimeConfig.setExecutableNaming(mvnMongoNamer);
+        MongodStarter runtime = MongodStarter.getInstance(runtimeConfig);
         mongodExe = runtime.prepare(new MongodConfig(Version.V2_0_5));
         mongod = mongodExe.start();
         mongoPort = mongod.getConfig().getPort();
