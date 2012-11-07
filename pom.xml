@@ -59,6 +59,12 @@
             <name>Nick Lloyd</name>
             <email>nlloyd@gmail.com</email>
         </developer>
+        <developer>
+            <id>tashdid</id>
+            <name>Tashdid Khan</name>
+            <email>tashdid@gmail.com</email>
+            <timezone>-5</timezone>
+        </developer>
     </developers>
 
     <properties>
@@ -97,61 +103,6 @@
         </dependency>
     </dependencies>
     
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                </configuration>
-            </plugin>
-
-	<developers>
-		<developer>
-			<id>epishkin</id>
-			<name>OLEKSII IEPISHKIN</name>
-			<email>epishkin@gmail.com</email>
-		</developer>
-		<developer>
-			<id>mlysaght</id>
-			<name>Michael Lysaght</name>
-			<email>mlysaght@secondmarket.com</email>
-		</developer>
-		<developer>
-			<id>nlloyd</id>
-			<name>Nick Lloyd</name>
-			<email>nlloyd@gmail.com</email>
-		</developer>
-	</developers>
-
-	<properties>
-		<java.version>1.6</java.version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-	</properties>
-
-	<dependencies>
-		<dependency>
-			<groupId>log4j</groupId>
-			<artifactId>log4j</artifactId>
-			<version>1.2.17</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.testng</groupId>
-			<artifactId>testng</artifactId>
-			<version>5.14.9</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-lang3</artifactId>
-			<version>3.1</version>
-		</dependency>
-	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>

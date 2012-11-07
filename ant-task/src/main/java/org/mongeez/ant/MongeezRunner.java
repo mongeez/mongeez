@@ -14,38 +14,34 @@ import com.mongodb.Mongo;
 public class MongeezRunner extends Task {
     private String dbName;
     private String host;
-    private String userName;
-    private String passWord;
+    private String username;
+    private String password;
     private Integer port;
     private String filePath;
 
     // The method executing the task
     public void execute() {
-        try {
-            System.out.println("using following configs: dbName:" + dbName + " host:" + host + " userName:" + userName
-                    + " passWord:" + passWord + " filePath:" + filePath + " port:" + port);
-            if (StringUtils.isNotBlank(host) && StringUtils.isNotBlank(filePath)) {
+        System.out.println("using following configs: dbName:" + dbName + " host:" + host + " username:" + username
+                + " password:" + password + " filePath:" + filePath + " port:" + port);
+        if (StringUtils.isNotBlank(host) && StringUtils.isNotBlank(filePath)) {
 
-                Mongeez mongeez = new Mongeez();
-                mongeez.setFile(new FileSystemResource(filePath));
-                try {
-                    mongeez.setMongo(new Mongo(host, port));
-                    if (StringUtils.isNotBlank(userName) && StringUtils.isNotBlank(passWord)) {
-                        MongoAuth auth = new MongoAuth(userName, passWord);
-                        mongeez.setAuth(auth);
-                    }
-                } catch (UnknownHostException e) {
-                    throw new BuildException(e);
+            Mongeez mongeez = new Mongeez();
+            mongeez.setFile(new FileSystemResource(filePath));
+            try {
+                mongeez.setMongo(new Mongo(host, port));
+                if (StringUtils.isNotBlank(username) && StringUtils.isNotBlank(password)) {
+                    MongoAuth auth = new MongoAuth(username, password);
+                    mongeez.setAuth(auth);
                 }
-                mongeez.setDbName(dbName);
-                mongeez.process();
-
-            } else {
-                System.err.print("Host and FilePath is required");
+            } catch (UnknownHostException e) {
+                throw new BuildException(e);
             }
-        } catch (Exception e) {
-            System.err.print("Exception Occured: " + e.getMessage());
-            // TODO: handle exception in ant manner
+            mongeez.setDbName(dbName);
+            mongeez.setVerbose(true);
+            mongeez.process();
+
+        } else {
+            System.err.print("Host and FilePath is required");
         }
     }
 
@@ -65,11 +61,11 @@ public class MongeezRunner extends Task {
         this.filePath = filePath;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public void setPassWord(String passWord) {
-        this.passWord = passWord;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
