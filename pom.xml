@@ -58,6 +58,7 @@
             <id>nlloyd</id>
             <name>Nick Lloyd</name>
             <email>nlloyd@gmail.com</email>
+            <timezone>-5</timezone>
         </developer>
         <developer>
             <id>tashdid</id>

@@ -104,9 +104,12 @@ public class MongeezRunner extends Task {
 
     public void setPassword(String password) {
         this.password = password;
+<<<<<<< HEAD
     }
     
     public void setVerbose(Boolean verbose) {
         this.verbose = verbose;
+=======
+>>>>>>> 504bdca... US66869 changes
     }
 }
