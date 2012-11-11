@@ -13,15 +13,18 @@ http://groups.google.com/group/mongeez-dev?hl=en
 
 
 ### Add mongeez to your project
+```xml
+<dependency>
+    <groupId>org.mongeez</groupId>
+	<artifactId>mongeez</artifactId>
+	<version>0.9.2</version>
+</dependency>
+```
+
 Maven repo for releases - http://repo1.maven.org/maven2/
 
 Internal versions - https://oss.sonatype.org/content/groups/public/
 
-	 <dependency>
-	   <groupId>org.mongeez</groupId>
-	   <artifactId>mongeez</artifactId>
-	   <version>0.9.1</version>
-	 </dependency>
 
 ### Or download mongeez from
-repo1.maven.org - http://search.maven.org/#browse%7C1196743083
+repo1.maven.org - http://repo1.maven.org/maven2/org/mongeez/mongeez/
