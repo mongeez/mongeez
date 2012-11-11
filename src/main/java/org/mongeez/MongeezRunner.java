@@ -11,12 +11,12 @@
  */
 package org.mongeez;
 
-import org.apache.commons.lang.StringUtils;
-import org.mongeez.reader.ChangeSetFileProvider;
+import com.mongodb.Mongo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.Resource;
 
-import com.mongodb.Mongo;
+import org.mongeez.reader.ChangeSetFileProvider;
 
 /**
  * @author oleksii

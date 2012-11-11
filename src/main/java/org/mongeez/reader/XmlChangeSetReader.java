@@ -12,12 +12,13 @@
 
 package org.mongeez.reader;
 
-import org.apache.commons.digester.Digester;
+import org.apache.commons.digester3.Digester;
 import org.apache.log4j.Logger;
+import org.springframework.core.io.Resource;
+
 import org.mongeez.commands.ChangeSet;
 import org.mongeez.commands.ChangeSetList;
 import org.mongeez.commands.Script;
-import org.springframework.core.io.Resource;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -19,7 +19,8 @@ import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.QueryBuilder;
 import com.mongodb.WriteConcern;
-import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
+
 import org.mongeez.MongoAuth;
 import org.mongeez.commands.ChangeSet;
 
