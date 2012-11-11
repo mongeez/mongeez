@@ -14,7 +14,7 @@
 
     <name>Mongeez</name>
     <description>An opensource project for mongodb change management</description>
-    <url>http://mongeez.org</url>
+    <url>http://github.com/secondmarket/mongeez</url>
 
     <licenses>
         <license>
@@ -119,6 +119,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.4</version>
                 <executions>
                     <execution>
                         <id>sign-artifacts</id>
