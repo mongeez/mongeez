@@ -41,6 +41,12 @@
             <name>Michael Lysaght</name>
             <email>mlysaght@secondmarket.com</email>
         </developer>
+        <developer>
+            <id>davidmc24</id>
+            <name>David M. Carr</name>
+            <email>david@carrclan.us</email>
+            <timezone>-5</timezone>
+        </developer>
     </developers>
 
     <properties>
