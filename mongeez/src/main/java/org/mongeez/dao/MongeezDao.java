@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.log4j.Logger;
 import org.mongeez.MongoAuth;
 import org.mongeez.commands.ChangeSet;
 
@@ -32,6 +33,7 @@ public class MongeezDao {
     private DB db;
     private MongoAuth auth;
     private List<ChangeSetAttribute> changeSetAttributes;
+    private final Logger logger = Logger.getLogger(MongeezDao.class);
 
     public MongeezDao(Mongo mongo, String databaseName, MongoAuth auth) {
         this.auth = auth;
@@ -86,12 +88,39 @@ public class MongeezDao {
     }
 
     private void ensureChangeSetExecutionIndex() {
+        // first check if we have the right index, with all parameters we need
+        List<DBObject> indexes = getMongeezCollection().getIndexInfo();
+        DBObject changeSetExecIndexInfo = null;
+        for(DBObject indexInfo : indexes) {
+            DBObject keys = (DBObject)indexInfo.get("key");
+            for(ChangeSetAttribute attribute : changeSetAttributes) {
+                if(!keys.containsField(attribute.name())) {
+                    continue;
+                }
+            }
+            // if we get here we have the right index
+            changeSetExecIndexInfo = indexInfo;
+            break;
+        }
         BasicDBObject keys = new BasicDBObject();
         keys.append("type", RecordType.changeSetExecution.name());
         for (ChangeSetAttribute attribute : changeSetAttributes) {
             keys.append(attribute.name(), 1);
         }
-        getMongeezCollection().ensureIndex(keys);
+        BasicDBObject options = new BasicDBObject();
+        options.append("unique", Boolean.TRUE);
+        if(changeSetExecIndexInfo != null) {
+            boolean isDifferent = false;
+            if(Boolean.FALSE.equals(changeSetExecIndexInfo.get("unique"))) {
+                isDifferent = true;
+            }
+            if(isDifferent) {
+                logger.info("ChangeSet entry index is not unique, recreating");
+                getMongeezCollection().dropIndex(keys);
+                options.append("dropDups", Boolean.TRUE);
+            }
+        }
+        getMongeezCollection().ensureIndex(keys, options);
     }
 
     public boolean wasExecuted(ChangeSet changeSet) {
