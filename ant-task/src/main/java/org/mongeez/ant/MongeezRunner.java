@@ -18,17 +18,50 @@ public class MongeezRunner extends Task {
     private String password;
     private Integer port;
     private String filePath;
+    private Boolean verbose = false;
 
     // The method executing the task
     public void execute() {
-        System.out.println("using following configs: dbName:" + dbName + " host:" + host + " username:" + username
-                + " password:" + password + " filePath:" + filePath + " port:" + port);
-        if (StringUtils.isNotBlank(host) && StringUtils.isNotBlank(filePath)) {
+        if (StringUtils.isNotBlank(filePath)) {
+            Mongo mongo = null;
+            try {
+                if(StringUtils.isNotBlank(host)) {
+                    System.out.println("Running mongeez against single mongodb instance...");
+                    System.out.println("using following configs: dbName:" + dbName + " host:" + host + " username:" + username
+                            + " password:" + password + " filePath:" + filePath + " port:" + port);
+                    mongo = new Mongo(host, port);
+                } else if(StringUtils.isNotBlank(urls)) {
+                    System.out.println("Running mongeez against replicaSet mongodb...");
+                    System.out.println("using following configs: dbName:" + dbName + " urls:" + urls + " username:" + username
+                            + " password:" + password + " filePath:" + filePath);
+                    List<ServerAddress> cluster = new ArrayList<ServerAddress>();
+                    String[] hostPortPairs = urls.split(",");
+                    if(hostPortPairs.length <= 1) {
+                        System.err.println("urls property MUST have more than one host:port pair, separated by commas");
+                        return;
+                    }
+                    for(String hostPortPair : hostPortPairs) {
+                        String[] hostPort = hostPortPair.split(":");
+                        if(hostPort.length != 2) {
+                            System.err.printf("%s in urls property is not of the format host:port!\n");
+                            return;
+                        }
+                        cluster.add(new ServerAddress(hostPort[0], Integer.valueOf(hostPort[1])));
+                    }
+                    mongo = new Mongo(cluster);
+                }
+            } catch(UnknownHostException e) {
+                throw new BuildException(e);
+            }
+            
+            if(verbose) {
+                System.out.println("[verbose logging enabled]");
+            }
 
             Mongeez mongeez = new Mongeez();
             mongeez.setFile(new FileSystemResource(filePath));
             try {
-                mongeez.setMongo(new Mongo(host, port));
+                mongeez.setMongo(mongo);
                 if (StringUtils.isNotBlank(username) && StringUtils.isNotBlank(password)) {
                     MongoAuth auth = new MongoAuth(username, password);
                     mongeez.setAuth(auth);
@@ -37,7 +70,7 @@ public class MongeezRunner extends Task {
                 throw new BuildException(e);
             }
             mongeez.setDbName(dbName);
-            mongeez.setVerbose(true);
+            mongeez.setVerbose(verbose);
             mongeez.process();
 
         } else {
@@ -67,5 +100,9 @@ public class MongeezRunner extends Task {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    
+    public void setVerbose(Boolean verbose) {
+        this.verbose = verbose;
     }
 }
