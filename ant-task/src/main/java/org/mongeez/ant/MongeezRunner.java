@@ -22,6 +22,7 @@ public class MongeezRunner extends Task {
     private String password;
     private Integer port;
     private String filePath;
+    private Boolean verbose = false;
 
     // The method executing the task
     public void execute() {
@@ -56,6 +57,10 @@ public class MongeezRunner extends Task {
             } catch(UnknownHostException e) {
                 throw new BuildException(e);
             }
+            
+            if(verbose) {
+                System.out.println("[verbose logging enabled]");
+            }
 
             Mongeez mongeez = new Mongeez();
             mongeez.setFile(new FileSystemResource(filePath));
@@ -65,7 +70,7 @@ public class MongeezRunner extends Task {
                 mongeez.setAuth(auth);
             }
             mongeez.setDbName(dbName);
-            mongeez.setVerbose(true);
+            mongeez.setVerbose(verbose);
             mongeez.process();
 
         } else {
@@ -99,5 +104,9 @@ public class MongeezRunner extends Task {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+    
+    public void setVerbose(Boolean verbose) {
+        this.verbose = verbose;
     }
 }
