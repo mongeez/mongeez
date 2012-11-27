@@ -93,10 +93,19 @@ public class MongeezDao {
         DBObject changeSetExecIndexInfo = null;
         for(DBObject indexInfo : indexes) {
             DBObject keys = (DBObject)indexInfo.get("key");
-            for(ChangeSetAttribute attribute : changeSetAttributes) {
-                if(!keys.containsField(attribute.name())) {
-                    continue;
+            boolean isAttrIndex = false;
+            // check the "type" key first
+            if(keys.containsField("type")) {
+                isAttrIndex = true;
+                for(ChangeSetAttribute attribute : changeSetAttributes) {
+                    if(!keys.containsField(attribute.name())) {
+                        isAttrIndex = false;
+                        break;
+                    }
                 }
+            }
+            if(!isAttrIndex) {
+                continue;
             }
             // if we get here we have the right index
             changeSetExecIndexInfo = indexInfo;
@@ -111,7 +120,7 @@ public class MongeezDao {
         options.append("unique", Boolean.TRUE);
         if(changeSetExecIndexInfo != null) {
             boolean isDifferent = false;
-            if(Boolean.FALSE.equals(changeSetExecIndexInfo.get("unique"))) {
+            if(!changeSetExecIndexInfo.containsField("unique") || Boolean.FALSE.equals(changeSetExecIndexInfo.get("unique"))) {
                 isDifferent = true;
             }
             if(isDifferent) {
