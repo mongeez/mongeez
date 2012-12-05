@@ -4,7 +4,7 @@
     <parent>
         <groupId>org.mongeez</groupId>
         <artifactId>mongeez-parent</artifactId>
-        <version>0.9.3-SNAPSHOT</version>
+        <version>0.9.3.rumba-SNAPSHOT</version>
     </parent>
 
     <artifactId>mongeez-ant</artifactId>
@@ -51,6 +51,11 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
         </dependency>
         <dependency>
             <groupId>de.flapdoodle.embed</groupId>

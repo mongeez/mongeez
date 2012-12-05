@@ -3,7 +3,7 @@
     
     <groupId>org.mongeez</groupId>
     <artifactId>mongeez-parent</artifactId>
-    <version>0.9.3-SNAPSHOT</version>
+    <version>0.9.3.rumba-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Mongeez</name>
@@ -42,6 +42,11 @@
 			<name>Michael Lysaght</name>
 			<email>mlysaght@secondmarket.com</email>
 		</developer>
+        <developer>
+            <id>tashdid</id>
+            <name>Tashdid Khan</name>
+            <email>tashdid@gmail.com</email>
+        </developer>
 		<developer>
 			<id>nlloyd</id>
 			<name>Nick Lloyd</name>

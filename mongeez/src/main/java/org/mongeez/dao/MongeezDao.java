@@ -20,6 +20,7 @@ import org.mongeez.MongoAuth;
 import org.mongeez.commands.ChangeSet;
 
 import com.mongodb.BasicDBObject;
+import com.mongodb.CommandResult;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
@@ -108,6 +109,8 @@ public class MongeezDao {
 
     public void runScript(String code) {
         db.eval(code);
+        CommandResult result = db.getLastError();
+        result.throwOnError();
     }
 
     public void logChangeSet(ChangeSet changeSet) {
