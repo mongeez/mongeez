@@ -1,9 +1,6 @@
 package org.mongeez.ant;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
+import static org.testng.Assert.*;
 
 import java.io.File;
 import java.net.UnknownHostException;
@@ -12,10 +9,10 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import org.mongeez.commands.ChangeSet;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -34,6 +31,7 @@ import de.flapdoodle.embed.mongo.distribution.Version;
 import de.flapdoodle.embed.process.extract.ITempNaming;
 import de.flapdoodle.embed.process.io.directories.IDirectory;
 
+@Test
 public class MongeezRunnerTest {
     private static MongodExecutable mongodExe;
     private static MongodProcess mongod;
@@ -254,7 +252,7 @@ public class MongeezRunnerTest {
         try {
             antTask.execute();
         } catch (Exception e) {
-            assertThat(e, is(MongoException.DuplicateKey.class));
+            assertTrue(e instanceof MongoException.DuplicateKey);
         }
         
         // check the results
@@ -287,7 +285,7 @@ public class MongeezRunnerTest {
         try {
             antTask.execute();
         } catch (Exception e) {
-            assertThat(e, is(MongoException.class));
+            assertTrue(e instanceof MongoException);
             assertEquals("can't start bg index b/c in recursive lock (db.eval?)", e.getMessage());
         }
         
