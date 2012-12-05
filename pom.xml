@@ -13,7 +13,7 @@
 	<modules>
 		<module>mongeez</module>
 		<module>ant-task</module>
-<!-- 		<module>examples</module> -->
+		<module>examples</module>
 	</modules>
 
 	<licenses>
