@@ -1,6 +1,8 @@
 package org.mongeez.ant;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.tools.ant.BuildException;
@@ -10,10 +12,12 @@ import org.mongeez.MongoAuth;
 import org.springframework.core.io.FileSystemResource;
 
 import com.mongodb.Mongo;
+import com.mongodb.ServerAddress;
 
 public class MongeezRunner extends Task {
     private String dbName;
     private String host;
+    private String urls;
     private String username;
     private String password;
     private Integer port;
@@ -60,21 +64,17 @@ public class MongeezRunner extends Task {
 
             Mongeez mongeez = new Mongeez();
             mongeez.setFile(new FileSystemResource(filePath));
-            try {
-                mongeez.setMongo(mongo);
-                if (StringUtils.isNotBlank(username) && StringUtils.isNotBlank(password)) {
-                    MongoAuth auth = new MongoAuth(username, password);
-                    mongeez.setAuth(auth);
-                }
-            } catch (UnknownHostException e) {
-                throw new BuildException(e);
+            mongeez.setMongo(mongo);
+            if (StringUtils.isNotBlank(username) && StringUtils.isNotBlank(password)) {
+                MongoAuth auth = new MongoAuth(username, password);
+                mongeez.setAuth(auth);
             }
             mongeez.setDbName(dbName);
             mongeez.setVerbose(verbose);
             mongeez.process();
 
         } else {
-            System.err.print("Host and FilePath is required");
+            System.err.print("FilePath is required");
         }
     }
 
@@ -88,6 +88,10 @@ public class MongeezRunner extends Task {
 
     public void setPort(Integer port) {
         this.port = port;
+    }
+    
+    public void setUrls(String urls) {
+        this.urls = urls;
     }
 
     public void setFilePath(String filePath) {
