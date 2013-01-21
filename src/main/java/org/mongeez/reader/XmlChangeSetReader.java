@@ -12,20 +12,20 @@
 
 package org.mongeez.reader;
 
-import org.apache.commons.digester3.Digester;
-import org.apache.log4j.Logger;
-import org.springframework.core.io.Resource;
-
-import org.mongeez.commands.ChangeSet;
-import org.mongeez.commands.ChangeSetList;
-import org.mongeez.commands.Script;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.digester3.Digester;
+import org.mongeez.commands.ChangeSet;
+import org.mongeez.commands.ChangeSetList;
+import org.mongeez.commands.Script;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
+
 public class XmlChangeSetReader implements ChangeSetReader {
-    private static final Logger logger = Logger.getLogger(XmlChangeSetReader.class);
+    private static final Logger logger = LoggerFactory.getLogger(XmlChangeSetReader.class);
 
     private Digester digester;
 

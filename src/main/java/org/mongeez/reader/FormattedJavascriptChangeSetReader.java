@@ -10,11 +10,6 @@
 
 package org.mongeez.reader;
 
-import org.apache.log4j.Logger;
-import org.mongeez.commands.ChangeSet;
-import org.mongeez.commands.Script;
-import org.springframework.core.io.Resource;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -24,6 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.mongeez.commands.ChangeSet;
+import org.mongeez.commands.Script;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
 
 public class FormattedJavascriptChangeSetReader implements ChangeSetReader {
     private static final String LINE_COMMENT = "//";
@@ -38,7 +39,7 @@ public class FormattedJavascriptChangeSetReader implements ChangeSetReader {
             Pattern.compile(".*runAlways:(\\w+).*",
                     Pattern.CASE_INSENSITIVE);
 
-    private static final Logger logger = Logger.getLogger(FormattedJavascriptChangeSetReader.class);
+    private static final Logger logger = LoggerFactory.getLogger(FormattedJavascriptChangeSetReader.class);
 
     private final Charset cs;
 

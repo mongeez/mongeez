@@ -13,13 +13,13 @@
 package org.mongeez;
 
 import com.mongodb.Mongo;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
 import org.mongeez.commands.ChangeSet;
 import org.mongeez.commands.Script;
 import org.mongeez.reader.ChangeSetFileProvider;
 import org.mongeez.reader.ChangeSetReaderFactory;
 import org.mongeez.reader.FilesetXMLChangeSetFileProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ import java.util.List;
 
 
 public class Mongeez {
-    private final static Logger logger = Logger.getLogger(Mongeez.class);
+    private final static Logger logger = LoggerFactory.getLogger(Mongeez.class);
 
     private Mongo mongo = null;
     private String dbName;
@@ -92,8 +92,5 @@ public class Mongeez {
 
     public void setVerbose(boolean isVerbose) {
         this.isVerbose = isVerbose;
-        if (isVerbose) {
-            logger.setLevel(Level.TRACE);
-        }
     }
 }
