@@ -10,9 +10,11 @@
 
 package org.mongeez.reader;
 
-import org.apache.log4j.Logger;
 import org.mongeez.commands.ChangeSet;
 import org.mongeez.commands.Script;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 
 import java.io.BufferedReader;
@@ -38,7 +40,7 @@ public class FormattedJavascriptChangeSetReader implements ChangeSetReader {
             Pattern.compile(".*runAlways:(\\w+).*",
                     Pattern.CASE_INSENSITIVE);
 
-    private static final Logger logger = Logger.getLogger(FormattedJavascriptChangeSetReader.class);
+    private static final Logger logger = LoggerFactory.getLogger(FormattedJavascriptChangeSetReader.class);
 
     private final Charset cs;
 
