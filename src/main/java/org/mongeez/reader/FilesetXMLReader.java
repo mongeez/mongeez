@@ -12,20 +12,20 @@
 
 package org.mongeez.reader;
 
-import org.apache.commons.digester3.Digester;
-import org.apache.log4j.Logger;
-import org.springframework.core.io.Resource;
-
-import org.mongeez.commands.ChangeFile;
-import org.mongeez.commands.ChangeFileSet;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.digester3.Digester;
+import org.mongeez.commands.ChangeFile;
+import org.mongeez.commands.ChangeFileSet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.io.Resource;
+
 public class FilesetXMLReader {
 
-    private static final Logger logger = Logger.getLogger(FilesetXMLReader.class);
+    private static final Logger logger = LoggerFactory.getLogger(FilesetXMLReader.class);
 
     public List<Resource> getFiles(Resource file) {
         List<Resource> files = new ArrayList<Resource>();

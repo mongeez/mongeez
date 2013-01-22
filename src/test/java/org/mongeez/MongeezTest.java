@@ -39,7 +39,6 @@ public class MongeezTest {
         mongeez.setFile(new ClassPathResource(path));
         mongeez.setMongo(mongo);
         mongeez.setDbName(dbName);
-        mongeez.setVerbose(true);
         return mongeez;
     }
 
