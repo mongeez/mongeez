@@ -34,8 +34,6 @@ public class Mongeez {
     private MongoAuth auth = null;
     private ChangeSetFileProvider changeSetFileProvider;
 
-    private boolean isVerbose = false;
-
     public void process() {
         List<ChangeSet> changeSets = getChangeSets();
         new ChangeSetExecutor(mongo, dbName, auth).execute(changeSets);
@@ -54,7 +52,7 @@ public class Mongeez {
     }
 
     private void logChangeSets(List<ChangeSet> changeSets) {
-        if (isVerbose) {
+        if (logger.isTraceEnabled()) {
             for (ChangeSet changeSet : changeSets) {
                 logger.trace("Changeset");
                 logger.trace("id: " + changeSet.getChangeId());
@@ -90,7 +88,4 @@ public class Mongeez {
         this.changeSetFileProvider = changeSetFileProvider;
     }
 
-    public void setVerbose(boolean isVerbose) {
-        this.isVerbose = isVerbose;
-    }
 }
