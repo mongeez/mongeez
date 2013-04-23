@@ -32,4 +32,4 @@ repo1.maven.org - http://repo1.maven.org/maven2/org/mongeez/mongeez
 
 Hopefully this thing is routinely green. Travis-CI monitors new code to this project and tests it on a variety of JDKs.
 
-[![Build Status](https://secure.travis-ci.org/secondmarket/mongeez.png?branch=master)](https://travis-ci.org/secondmarket/mongeez)
+[![Build Status](https://travis-ci.org/secondmarket/mongeez.png?branch=master)](https://travis-ci.org/secondmarket/mongeez)
