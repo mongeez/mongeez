@@ -4,7 +4,6 @@ mongeez allows you to manage changes of your mongo documents and propagate these
 
 For further information and usage guidelines check out [the wiki](https://github.com/secondmarket/mongeez/wiki/How-to-use-mongeez).
 
-
 ###  Join the user group
 http://groups.google.com/group/mongeez-users
 
