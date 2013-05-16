@@ -15,6 +15,7 @@ package org.mongeez;
 import static org.testng.Assert.assertEquals;
 
 import com.mongodb.DB;
+import com.mongodb.DBCursor;
 import com.mongodb.Mongo;
 import org.springframework.core.io.ClassPathResource;
 import org.testng.annotations.BeforeMethod;
@@ -58,6 +59,22 @@ public class MongeezTest {
     public void testRunTwice() throws Exception {
         testMongeez();
         testMongeez();
+    }
+
+    @Test(groups = "dao")
+    public void testFailOnError_False() throws Exception {
+        assertEquals(db.getCollection("mongeez").count(), 0);
+
+        Mongeez mongeez = create("mongeez_fail.xml");
+        mongeez.process();
+
+        assertEquals(db.getCollection("mongeez").count(), 2);
+    }
+
+    @Test(groups = "dao", expectedExceptions = com.mongodb.CommandFailureException.class)
+    public void testFailOnError_True() throws Exception {
+        Mongeez mongeez = create("mongeez_fail_fail.xml");
+        mongeez.process();
     }
 
     @Test(groups = "dao")
