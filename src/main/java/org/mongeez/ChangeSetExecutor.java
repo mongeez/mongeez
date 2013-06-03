@@ -48,8 +48,16 @@ public class ChangeSetExecutor {
     }
 
     private void execute(ChangeSet changeSet) {
-        for (Script command : changeSet.getCommands()) {
-            command.run(dao);
+        try {
+            for (Script command : changeSet.getCommands()) {
+                command.run(dao);
+            }
+        } catch (RuntimeException e) {
+            if (changeSet.isFailOnError()) {
+                throw e;
+            } else {
+                logger.warn("ChangeSet " + changeSet.getChangeId() + " has failed, but failOnError is set to false", e.getMessage());
+            }
         }
         dao.logChangeSet(changeSet);
     }

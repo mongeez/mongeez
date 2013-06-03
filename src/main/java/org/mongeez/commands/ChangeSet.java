@@ -21,6 +21,7 @@ public class ChangeSet {
     private String file;
     private String resourcePath;
 
+    private boolean failOnError = true;
     private boolean runAlways;
 
     private List<Script> commands = new ArrayList<Script>();
@@ -47,6 +48,14 @@ public class ChangeSet {
 
     public void setRunAlways(boolean runAlways) {
         this.runAlways = runAlways;
+    }
+
+    public boolean isFailOnError() {
+        return failOnError;
+    }
+
+    public void setFailOnError(boolean failOnError) {
+        this.failOnError = failOnError;
     }
 
     public String getFile() {
