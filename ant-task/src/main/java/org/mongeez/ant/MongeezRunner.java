@@ -4,17 +4,22 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.mongeez.Mongeez;
 import org.mongeez.MongoAuth;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.FileSystemResource;
 
 import com.mongodb.Mongo;
 import com.mongodb.ServerAddress;
 
 public class MongeezRunner extends Task {
+    
+    private static Logger logger = LoggerFactory.getLogger(MongeezRunner.class);
+    
     private String dbName;
     private String host;
     private String urls;
@@ -22,7 +27,6 @@ public class MongeezRunner extends Task {
     private String password;
     private Integer port;
     private String filePath;
-    private Boolean verbose = false;
 
     // The method executing the task
     public void execute() {
@@ -30,24 +34,24 @@ public class MongeezRunner extends Task {
             Mongo mongo = null;
             try {
                 if(StringUtils.isNotBlank(host)) {
-                    System.out.println("Running mongeez against single mongodb instance...");
-                    System.out.println("using following configs: dbName:" + dbName + " host:" + host + " username:" + username
+                    logger.info("Running mongeez against single mongodb instance...");
+                    logger.info("using following configs: dbName:" + dbName + " host:" + host + " username:" + username
                             + " password:" + password + " filePath:" + filePath + " port:" + port);
                     mongo = new Mongo(host, port);
                 } else if(StringUtils.isNotBlank(urls)) {
-                    System.out.println("Running mongeez against replicaSet mongodb...");
-                    System.out.println("using following configs: dbName:" + dbName + " urls:" + urls + " username:" + username
+                    logger.info("Running mongeez against replicaSet mongodb...");
+                    logger.info("using following configs: dbName:" + dbName + " urls:" + urls + " username:" + username
                             + " password:" + password + " filePath:" + filePath);
                     List<ServerAddress> cluster = new ArrayList<ServerAddress>();
                     String[] hostPortPairs = urls.split(",");
                     if(hostPortPairs.length <= 1) {
-                        System.err.println("urls property MUST have more than one host:port pair, separated by commas");
+                        logger.error("urls property MUST have more than one host:port pair, separated by commas");
                         return;
                     }
                     for(String hostPortPair : hostPortPairs) {
                         String[] hostPort = hostPortPair.split(":");
                         if(hostPort.length != 2) {
-                            System.err.printf("%s in urls property is not of the format host:port!\n");
+                            logger.error(String.format("%s in urls property is not of the format host:port!\n", urls));
                             return;
                         }
                         cluster.add(new ServerAddress(hostPort[0], Integer.valueOf(hostPort[1])));
@@ -58,10 +62,6 @@ public class MongeezRunner extends Task {
                 throw new BuildException(e);
             }
             
-            if(verbose) {
-                System.out.println("[verbose logging enabled]");
-            }
-
             Mongeez mongeez = new Mongeez();
             mongeez.setFile(new FileSystemResource(filePath));
             mongeez.setMongo(mongo);
@@ -70,11 +70,10 @@ public class MongeezRunner extends Task {
                 mongeez.setAuth(auth);
             }
             mongeez.setDbName(dbName);
-            mongeez.setVerbose(verbose);
             mongeez.process();
 
         } else {
-            System.err.print("FilePath is required");
+            logger.error("FilePath is required");
         }
     }
 
@@ -104,12 +103,5 @@ public class MongeezRunner extends Task {
 
     public void setPassword(String password) {
         this.password = password;
-<<<<<<< HEAD
-    }
-    
-    public void setVerbose(Boolean verbose) {
-        this.verbose = verbose;
-=======
->>>>>>> 504bdca... US66869 changes
     }
 }

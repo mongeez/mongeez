@@ -1,21 +1,21 @@
 package org.mongeez.ant;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
-import java.io.File;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
 import org.mongeez.commands.ChangeSet;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
+import ch.qos.logback.classic.BasicConfigurator;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -25,14 +25,25 @@ import com.mongodb.DBObject;
 import com.mongodb.Mongo;
 import com.mongodb.MongoException;
 
+import de.flapdoodle.embed.mongo.Command;
 import de.flapdoodle.embed.mongo.MongodExecutable;
 import de.flapdoodle.embed.mongo.MongodProcess;
 import de.flapdoodle.embed.mongo.MongodStarter;
-import de.flapdoodle.embed.mongo.config.MongodConfig;
-import de.flapdoodle.embed.mongo.config.RuntimeConfig;
-import de.flapdoodle.embed.mongo.distribution.Version;
+import de.flapdoodle.embed.mongo.config.ArtifactStoreBuilder;
+import de.flapdoodle.embed.mongo.config.DownloadConfigBuilder;
+import de.flapdoodle.embed.mongo.config.IMongodConfig;
+import de.flapdoodle.embed.mongo.config.MongodConfigBuilder;
+import de.flapdoodle.embed.mongo.config.Net;
+import de.flapdoodle.embed.mongo.config.RuntimeConfigBuilder;
+import de.flapdoodle.embed.process.config.IRuntimeConfig;
+import de.flapdoodle.embed.process.config.io.ProcessOutput;
+import de.flapdoodle.embed.process.distribution.GenericVersion;
 import de.flapdoodle.embed.process.extract.ITempNaming;
+import de.flapdoodle.embed.process.extract.UUIDTempNaming;
+import de.flapdoodle.embed.process.io.Processors;
+import de.flapdoodle.embed.process.io.directories.FixedPath;
 import de.flapdoodle.embed.process.io.directories.IDirectory;
+import de.flapdoodle.embed.process.runtime.Network;
 
 public class MongeezRunnerTest {
     private static MongodExecutable mongodExe;
@@ -41,40 +52,54 @@ public class MongeezRunnerTest {
     
     @BeforeClass
     public static void setUpMongod() throws Exception {
-        IDirectory mvnBuildPath = new IDirectory() {
-            @Override
-            public File asFile() {
-                String currentDir = System.getProperty("user.dir");
-                return new File(currentDir, "target");
-            }
-        };
         ITempNaming mvnMongoNamer = new ITempNaming() {
             @Override
             public String nameFor(String prefix, String postfix) {
                 return prefix + postfix;
             }
         };
-        RuntimeConfig runtimeConfig = new RuntimeConfig();
-        runtimeConfig.setTempDirFactory(mvnBuildPath);
-        runtimeConfig.setExecutableNaming(mvnMongoNamer);
+        
+        ProcessOutput processOutput = new ProcessOutput(Processors.namedConsole("[mongod>]"),
+                Processors.namedConsole("[MONGOD>]"), Processors.namedConsole("[console>]"));
+
+        Command command = Command.MongoD;
+
+        IRuntimeConfig runtimeConfig = new RuntimeConfigBuilder()
+            .defaults(command)
+            .processOutput(processOutput)
+            .artifactStore(new ArtifactStoreBuilder()
+                .defaults(command)
+                .download(new DownloadConfigBuilder()
+                    .defaultsForCommand(command)
+                )
+                .executableNaming(mvnMongoNamer)
+            )
+            .build();
+        
+        mongoPort = Network.getFreeServerPort();
+        IMongodConfig mongodConfig = new MongodConfigBuilder()
+            .version(new GenericVersion("2.4.5"))
+            .net(new Net(mongoPort, Network.localhostIsIPv6()))
+            .build();
+
         MongodStarter runtime = MongodStarter.getInstance(runtimeConfig);
-        mongodExe = runtime.prepare(new MongodConfig(Version.V2_0_5));
+        mongodExe = runtime.prepare(mongodConfig);
         mongod = mongodExe.start();
-        mongoPort = mongod.getConfig().getPort();
+        
+        BasicConfigurator.configureDefaultContext();
     }
 
-    @SuppressWarnings("deprecation")
     @AfterClass
     public static void cleanUpMongod() throws Exception {
         mongod.stop();
-        mongodExe.cleanup();
+        mongodExe.stop();
     }
 
     /**
      * First we run an initial simple collection of changelogs... see what happens.
      * @throws UnknownHostException 
      */
-    @Test
+    @Test(groups = "ant")
     public void runFirstMongeezSetup() throws UnknownHostException {
         Mongo mongo = new Mongo("localhost", mongoPort);
         // make sure we start clean
@@ -158,7 +183,7 @@ public class MongeezRunnerTest {
      * does what it is supposed to do.
      * @throws UnknownHostException 
      */
-    @Test
+    @Test(groups = "ant")
     public void runSecondMongeezSetup() throws UnknownHostException {
         // configure and run the ant task
         MongeezRunner antTask = new MongeezRunner();
@@ -237,71 +262,5 @@ public class MongeezRunnerTest {
             // field should be removed for this test
             assertFalse(cursor.next().containsField("date"));
         }
-    }
-
-    /**
-     * See if we get an exception when a unique index is created on a non-unique field.
-     * @throws UnknownHostException 
-     */
-    @Test
-    public void runBadMongeezScriptUniqueIndexCreationFailure() throws UnknownHostException {
-        // configure and run the ant task
-        MongeezRunner antTask = new MongeezRunner();
-        antTask.setHost("localhost");
-        antTask.setPort(mongoPort);
-        antTask.setDbName("unittest");
-        antTask.setFilePath("target/test-classes/mongeez_badtest3.xml");
-        try {
-            antTask.execute();
-        } catch (Exception e) {
-            assertThat(e, is(MongoException.DuplicateKey.class));
-        }
-        
-        // check the results
-        Mongo mongo = new Mongo("localhost", mongoPort);
-        DB db = mongo.getDB("unittest");
-        Set<String> collections = db.getCollectionNames();
-        assertTrue(collections.contains("mongeez"));
-        DBCollection mongeez = db.getCollection("mongeez");
-        BasicDBObject query = new BasicDBObject();
-        query.put("type", "changeSetExecution");
-        query.put("file", "changelog_badset4.js");
-        query.put("changeId", "breakingIndex");
-        long foundEntryCount = mongeez.count(query);
-        assertEquals(0, foundEntryCount);
-    }
-
-    /**
-     * See if we get an exception when trying to run a background index.
-     * TODO: find a way to make this possible through mongeez!
-     * @throws UnknownHostException 
-     */
-    @Test
-    public void runBadMongeezScriptBackgroundIndex() throws UnknownHostException {
-        // configure and run the ant task
-        MongeezRunner antTask = new MongeezRunner();
-        antTask.setHost("localhost");
-        antTask.setPort(mongoPort);
-        antTask.setDbName("unittest");
-        antTask.setFilePath("target/test-classes/mongeez_badtest4.xml");
-        try {
-            antTask.execute();
-        } catch (Exception e) {
-            assertThat(e, is(MongoException.class));
-            assertEquals("can't start bg index b/c in recursive lock (db.eval?)", e.getMessage());
-        }
-        
-        // check the results
-        Mongo mongo = new Mongo("localhost", mongoPort);
-        DB db = mongo.getDB("unittest");
-        Set<String> collections = db.getCollectionNames();
-        assertTrue(collections.contains("mongeez"));
-        DBCollection mongeez = db.getCollection("mongeez");
-        BasicDBObject query = new BasicDBObject();
-        query.put("type", "changeSetExecution");
-        query.put("file", "changelog_badset5.js");
-        query.put("changeId", "breakingIndex2");
-        long foundEntryCount = mongeez.count(query);
-        assertEquals(0, foundEntryCount);
     }
 }

@@ -12,16 +12,7 @@
 
 package org.mongeez.dao;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang.time.DateFormatUtils;
-import org.apache.log4j.Logger;
-import org.mongeez.MongoAuth;
-import org.mongeez.commands.ChangeSet;
-
 import com.mongodb.BasicDBObject;
-import com.mongodb.CommandResult;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
@@ -39,7 +30,6 @@ import java.util.List;
 public class MongeezDao {
     private DB db;
     private List<ChangeSetAttribute> changeSetAttributes;
-    private final Logger logger = Logger.getLogger(MongeezDao.class);
 
     public MongeezDao(Mongo mongo, String databaseName) {
         this(mongo, databaseName, null);
@@ -109,48 +99,12 @@ public class MongeezDao {
     }
 
     private void ensureChangeSetExecutionIndex() {
-        // first check if we have the right index, with all parameters we need
-        List<DBObject> indexes = getMongeezCollection().getIndexInfo();
-        DBObject changeSetExecIndexInfo = null;
-        for(DBObject indexInfo : indexes) {
-            DBObject keys = (DBObject)indexInfo.get("key");
-            boolean isAttrIndex = false;
-            // check the "type" key first
-            if(keys.containsField("type")) {
-                isAttrIndex = true;
-                for(ChangeSetAttribute attribute : changeSetAttributes) {
-                    if(!keys.containsField(attribute.name())) {
-                        isAttrIndex = false;
-                        break;
-                    }
-                }
-            }
-            if(!isAttrIndex) {
-                continue;
-            }
-            // if we get here we have the right index
-            changeSetExecIndexInfo = indexInfo;
-            break;
-        }
         BasicDBObject keys = new BasicDBObject();
         keys.append("type", 1);
         for (ChangeSetAttribute attribute : changeSetAttributes) {
             keys.append(attribute.name(), 1);
         }
-        BasicDBObject options = new BasicDBObject();
-        options.append("unique", Boolean.TRUE);
-        if(changeSetExecIndexInfo != null) {
-            boolean isDifferent = false;
-            if(!changeSetExecIndexInfo.containsField("unique") || Boolean.FALSE.equals(changeSetExecIndexInfo.get("unique"))) {
-                isDifferent = true;
-            }
-            if(isDifferent) {
-                logger.info("ChangeSet entry index is not unique, recreating");
-                getMongeezCollection().dropIndex(keys);
-                options.append("dropDups", Boolean.TRUE);
-            }
-        }
-        getMongeezCollection().ensureIndex(keys, options);
+        getMongeezCollection().ensureIndex(keys);
     }
 
     public boolean wasExecuted(ChangeSet changeSet) {
@@ -168,8 +122,6 @@ public class MongeezDao {
 
     public void runScript(String code) {
         db.eval(code);
-        CommandResult result = db.getLastError();
-        result.throwOnError();
     }
 
     public void logChangeSet(ChangeSet changeSet) {

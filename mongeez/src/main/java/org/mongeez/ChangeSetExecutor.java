@@ -39,14 +39,10 @@ public class ChangeSetExecutor {
     public void execute(List<ChangeSet> changeSets) {
         for (ChangeSet changeSet : changeSets) {
             if (changeSet.isRunAlways() || !dao.wasExecuted(changeSet)) {
-                logger.info(String.format("Executing ChangeSet: %s in %s by %s...", 
-                        changeSet.getChangeId(), changeSet.getFile(), changeSet.getAuthor()));
                 execute(changeSet);
-                logger.info(String.format("Executed ChangeSet: %s in %s by %s", 
-                        changeSet.getChangeId(), changeSet.getFile(), changeSet.getAuthor()));
+                logger.info("ChangeSet " + changeSet.getChangeId() + " has been executed");
             } else {
-                logger.info(String.format("Skipping previously executed ChangeSet: %s in %s by %s", 
-                        changeSet.getChangeId(), changeSet.getFile(), changeSet.getAuthor()));
+                logger.info("ChangeSet already executed: " + changeSet.getChangeId());
             }
         }
     }
