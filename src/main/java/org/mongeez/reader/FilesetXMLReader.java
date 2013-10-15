@@ -42,11 +42,17 @@ public class FilesetXMLReader {
             digester.addSetNext("changeFiles/file", "add");
 
             ChangeFileSet changeFileSet = (ChangeFileSet) digester.parse(file.getInputStream());
-            logger.info("Num of changefiles " + changeFileSet.getChangeFiles().size());
+	    if (changeFileSet != null) {
+		logger.info("Num of changefiles " + changeFileSet.getChangeFiles().size());
 
-            for (ChangeFile changeFile : changeFileSet.getChangeFiles()) {
-                files.add(file.createRelative(changeFile.getPath()));
-            }
+		for (ChangeFile changeFile : changeFileSet.getChangeFiles()) {
+		    files.add(file.createRelative(changeFile.getPath()));
+		}
+	    }
+	    else {
+		logger.error("The file {} doesn't seem to contain a changeFiles declaration. Are you "
+			     + "using the correct file to initialize Mongeez?", file.getFilename());
+	    }
         } catch (IOException e) {
             logger.error("IOException", e);
         } catch (org.xml.sax.SAXException e) {

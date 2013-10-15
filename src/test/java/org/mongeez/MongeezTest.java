@@ -84,4 +84,23 @@ public class MongeezTest {
 
         assertEquals(db.getCollection("mongeez").count(), 1);
     }
+
+    @Test(groups = "dao")
+    public void testNoFailureOnEmptyChangeLog() throws Exception {
+        assertEquals(db.getCollection("mongeez").count(), 0);
+
+        Mongeez mongeez = create("mongeez_empty_changelog.xml");
+        mongeez.process();
+
+        assertEquals(db.getCollection("mongeez").count(), 1);
+    }
+
+    @Test(groups = "dao")
+    public void testNoFailureOnNoChangeFilesBlock() throws Exception {
+        assertEquals(db.getCollection("mongeez").count(), 0);
+
+        Mongeez mongeez = create("mongeez_no_changefiles_declared.xml");
+        mongeez.process();
+        assertEquals(db.getCollection("mongeez").count(), 1);
+    }
 }
