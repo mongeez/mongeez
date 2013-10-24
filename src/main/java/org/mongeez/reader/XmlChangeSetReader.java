@@ -55,9 +55,10 @@ public class XmlChangeSetReader implements ChangeSetReader {
         List<ChangeSet> changeSets = new ArrayList<ChangeSet>();
 
         try {
+            logger.info("Parsing XML Change Set File {}", file.getFilename());
             ChangeSetList changeFileSet = (ChangeSetList) digester.parse(file.getInputStream());
-            if (changeFileSet.getList() == null) {
-                logger.warn("Ignoring change file {}, it does not contain any changeSets", file.getFilename());
+            if (changeFileSet == null) {
+                logger.warn("Ignoring change file {}, the parser returned null. Please check your formatting.", file.getFilename());
             }
             else {
                 for (ChangeSet changeSet : changeFileSet.getList()) {

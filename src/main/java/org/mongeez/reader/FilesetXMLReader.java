@@ -41,9 +41,10 @@ public class FilesetXMLReader {
             digester.addSetProperties("changeFiles/file");
             digester.addSetNext("changeFiles/file", "add");
 
+            logger.info("Parsing XML Fileset file {}", file.getFilename());
             ChangeFileSet changeFileSet = (ChangeFileSet) digester.parse(file.getInputStream());
             if (changeFileSet != null) {
-                logger.info("Num of changefiles " + changeFileSet.getChangeFiles().size());
+                logger.info("Num of changefiles found " + changeFileSet.getChangeFiles().size());
                 for (ChangeFile changeFile : changeFileSet.getChangeFiles()) {
                     files.add(file.createRelative(changeFile.getPath()));
                 }
