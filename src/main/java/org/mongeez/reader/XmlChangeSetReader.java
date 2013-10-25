@@ -51,21 +51,26 @@ public class XmlChangeSetReader implements ChangeSetReader {
     }
 
     @Override
-	public List<ChangeSet> getChangeSets(Resource file) {
+    public List<ChangeSet> getChangeSets(Resource file) {
         List<ChangeSet> changeSets = new ArrayList<ChangeSet>();
 
         try {
+            logger.info("Parsing XML Change Set File {}", file.getFilename());
             ChangeSetList changeFileSet = (ChangeSetList) digester.parse(file.getInputStream());
-            for (ChangeSet changeSet : changeFileSet.getList()) {
-                ChangeSetReaderUtil.populateChangeSetResourceInfo(changeSet, file);
+            if (changeFileSet == null) {
+                logger.warn("Ignoring change file {}, the parser returned null. Please check your formatting.", file.getFilename());
             }
-            changeSets.addAll(changeFileSet.getList());
+            else {
+                for (ChangeSet changeSet : changeFileSet.getList()) {
+                    ChangeSetReaderUtil.populateChangeSetResourceInfo(changeSet, file);
+                }
+                changeSets.addAll(changeFileSet.getList());
+            }
         } catch (IOException e) {
             logger.error("IOException", e);
         } catch (org.xml.sax.SAXException e) {
             logger.error("SAXException", e);
         }
-
         return changeSets;
     }
 }

@@ -19,6 +19,9 @@ public class ChangeSetList {
     List<ChangeSet> list = null;
 
     public List<ChangeSet> getList() {
+        if (list == null) {
+            list = new ArrayList<ChangeSet>();
+        }
         return list;
     }
 
@@ -27,9 +30,6 @@ public class ChangeSetList {
     }
 
     public void add(ChangeSet changeSet) {
-        if (list == null) {
-            list = new ArrayList<ChangeSet>();
-        }
-        this.list.add(changeSet);
+        getList().add(changeSet);
     }
 }
