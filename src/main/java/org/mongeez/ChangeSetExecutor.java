@@ -27,22 +27,29 @@ public class ChangeSetExecutor {
     private final Logger logger = LoggerFactory.getLogger(ChangeSetExecutor.class);
 
     private MongeezDao dao = null;
+    private String context = null;
 
-    public ChangeSetExecutor(Mongo mongo, String dbName) {
-        this(mongo, dbName, null);
+    public ChangeSetExecutor(Mongo mongo, String dbName, String context) {
+        this(mongo, dbName, context, null);
     }
 
-    public ChangeSetExecutor(Mongo mongo, String dbName, MongoAuth auth) {
+    public ChangeSetExecutor(Mongo mongo, String dbName, String context, MongoAuth auth) {
         dao = new MongeezDao(mongo, dbName, auth);
+        this.context = context;
     }
 
     public void execute(List<ChangeSet> changeSets) {
         for (ChangeSet changeSet : changeSets) {
-            if (changeSet.isRunAlways() || !dao.wasExecuted(changeSet)) {
-                execute(changeSet);
-                logger.info("ChangeSet " + changeSet.getChangeId() + " has been executed");
-            } else {
-                logger.info("ChangeSet already executed: " + changeSet.getChangeId());
+            if (changeSet.canBeAppliedInContext(context)) {
+                if (changeSet.isRunAlways() || !dao.wasExecuted(changeSet)) {
+                    execute(changeSet);
+                    logger.info("ChangeSet " + changeSet.getChangeId() + " has been executed");
+                } else {
+                    logger.info("ChangeSet already executed: " + changeSet.getChangeId());
+                }
+            }
+            else {
+                logger.info("Not executing Changeset {} it cannot run in the context {}", changeSet.getChangeId(), context);
             }
         }
     }

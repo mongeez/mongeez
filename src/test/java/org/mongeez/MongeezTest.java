@@ -103,4 +103,45 @@ public class MongeezTest {
         mongeez.process();
         assertEquals(db.getCollection("mongeez").count(), 1);
     }
+
+    @Test(groups = "dao")
+    public void testChangesWContextContextNotSet() throws Exception {
+        assertEquals(db.getCollection("mongeez").count(), 0);
+
+        Mongeez mongeez = create("mongeez_contexts.xml");
+        mongeez.process();
+        assertEquals(db.getCollection("mongeez").count(), 2);
+        assertEquals(db.getCollection("car").count(), 2);
+        assertEquals(db.getCollection("user").count(), 0);
+        assertEquals(db.getCollection("organization").count(), 0);
+        assertEquals(db.getCollection("house").count(), 0);
+    }
+
+    @Test(groups = "dao")
+    public void testChangesWContextContextSetToUsers() throws Exception {
+        assertEquals(db.getCollection("mongeez").count(), 0);
+
+        Mongeez mongeez = create("mongeez_contexts.xml");
+        mongeez.setContext("users");
+        mongeez.process();
+        assertEquals(db.getCollection("mongeez").count(), 4);
+        assertEquals(db.getCollection("car").count(), 2);
+        assertEquals(db.getCollection("user").count(), 2);
+        assertEquals(db.getCollection("organization").count(), 0);
+        assertEquals(db.getCollection("house").count(), 2);
+    }
+
+    @Test(groups = "dao")
+    public void testChangesWContextContextSetToOrganizations() throws Exception {
+        assertEquals(db.getCollection("mongeez").count(), 0);
+
+        Mongeez mongeez = create("mongeez_contexts.xml");
+        mongeez.setContext("organizations");
+        mongeez.process();
+        assertEquals(db.getCollection("mongeez").count(), 4);
+        assertEquals(db.getCollection("car").count(), 2);
+        assertEquals(db.getCollection("user").count(), 0);
+        assertEquals(db.getCollection("organization").count(), 2);
+        assertEquals(db.getCollection("house").count(), 2);
+    }
 }

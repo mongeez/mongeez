@@ -20,6 +20,8 @@ public class ChangeSet {
     private String author;
     private String file;
     private String resourcePath;
+    private String contextsStr;
+    private ArrayList<String> contexts;
 
     private boolean failOnError = true;
     private boolean runAlways;
@@ -80,5 +82,41 @@ public class ChangeSet {
 
     public List<Script> getCommands() {
         return commands;
+    }
+    
+    public String getContexts()
+    {
+        if (contextsStr == null)
+        {
+            contextsStr = "";
+        }
+
+        return contextsStr;
+    }
+
+    public void setContexts(String contextsStr) {
+        this.contextsStr = contextsStr;
+        contexts = null;
+    }
+
+    public boolean canBeAppliedInContext(String context) {
+        if (contextsStr == null) {
+            return true;
+        }
+
+        if (contexts == null) {
+            contexts = new ArrayList<String>();
+            for (String requiredContext : contextsStr.split(",")) {
+                String cleanedContext = requiredContext.toLowerCase().trim();
+                if (cleanedContext.length() > 0) {
+                    contexts.add(cleanedContext);
+                }
+            }
+        }
+        
+        if (contexts.size() > 0 && (context == null || !contexts.contains(context.toLowerCase().trim()))) {
+            return false;
+        }
+        return true;
     }
 }
