@@ -113,10 +113,6 @@ public class ChangeSet {
                 }
             }
         }
-        
-        if (contexts.size() > 0 && (context == null || !contexts.contains(context.toLowerCase().trim()))) {
-            return false;
-        }
-        return true;
+        return contexts.isEmpty() || (context != null && contexts.contains(context.toLowerCase().trim()));
     }
 }
