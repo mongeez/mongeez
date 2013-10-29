@@ -34,10 +34,11 @@ public class Mongeez {
     private String dbName;
     private MongoAuth auth = null;
     private ChangeSetFileProvider changeSetFileProvider;
+    private String context = null;
 
     public void process() {
         List<ChangeSet> changeSets = getChangeSets();
-        new ChangeSetExecutor(mongo, dbName, auth).execute(changeSets);
+        new ChangeSetExecutor(mongo, dbName, context, auth).execute(changeSets);
     }
 
     private List<ChangeSet> getChangeSets() {
@@ -58,6 +59,9 @@ public class Mongeez {
                 logger.trace("Changeset");
                 logger.trace("id: " + changeSet.getChangeId());
                 logger.trace("author: " + changeSet.getAuthor());
+                if (! "".equals(changeSet.getContexts())) {
+                    logger.trace("contexts: {}", changeSet.getContexts());
+                }
                 for (Script command : changeSet.getCommands()) {
                     logger.trace("script");
                     logger.trace(command.getBody());
@@ -87,6 +91,10 @@ public class Mongeez {
 
     public void setChangeSetFileProvider(ChangeSetFileProvider changeSetFileProvider) {
         this.changeSetFileProvider = changeSetFileProvider;
+    }
+
+    public void setContext(String context) {
+        this.context = context;
     }
 
 }
