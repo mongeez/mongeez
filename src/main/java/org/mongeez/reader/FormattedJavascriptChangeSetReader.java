@@ -10,9 +10,9 @@
 
 package org.mongeez.reader;
 
+import org.mongeez.MongeezException;
 import org.mongeez.commands.ChangeSet;
 import org.mongeez.commands.Script;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -63,10 +63,8 @@ public class FormattedJavascriptChangeSetReader implements ChangeSetReader {
 
         try {
             changeSets.addAll(parse(file));
-        } catch (IOException e) {
-            logger.error("IOException", e);
-        } catch (ParseException e) {
-            logger.error("ParseException", e);
+        } catch (Exception e) {
+            throw new MongeezException(e);
         }
 
         return changeSets;

@@ -12,16 +12,15 @@
 
 package org.mongeez.reader;
 
+import org.apache.commons.digester3.Digester;
+import org.mongeez.MongeezException;
 import org.mongeez.commands.ChangeSet;
 import org.mongeez.commands.ChangeSetList;
 import org.mongeez.commands.Script;
-
-import org.apache.commons.digester3.Digester;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,7 +57,7 @@ public class XmlChangeSetReader implements ChangeSetReader {
             logger.info("Parsing XML Change Set File {}", file.getFilename());
             ChangeSetList changeFileSet = (ChangeSetList) digester.parse(file.getInputStream());
             if (changeFileSet == null) {
-                logger.warn("Ignoring change file {}, the parser returned null. Please check your formatting.", file.getFilename());
+                throw new MongeezException("Ignoring change file \"" + file.getFilename() + "\", the parser returned null. Please check your formatting.");
             }
             else {
                 for (ChangeSet changeSet : changeFileSet.getList()) {
@@ -66,10 +65,8 @@ public class XmlChangeSetReader implements ChangeSetReader {
                 }
                 changeSets.addAll(changeFileSet.getList());
             }
-        } catch (IOException e) {
-            logger.error("IOException", e);
-        } catch (org.xml.sax.SAXException e) {
-            logger.error("SAXException", e);
+        } catch (Exception e) {
+            throw new MongeezException(e);
         }
         return changeSets;
     }

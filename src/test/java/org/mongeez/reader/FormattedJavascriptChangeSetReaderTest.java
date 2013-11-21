@@ -10,6 +10,7 @@
 
 package org.mongeez.reader;
 
+import org.mongeez.MongeezException;
 import org.mongeez.commands.ChangeSet;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
@@ -19,6 +20,7 @@ import java.nio.charset.Charset;
 import java.util.List;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.fail;
 
 public class FormattedJavascriptChangeSetReaderTest {
     @Test
@@ -77,17 +79,32 @@ public class FormattedJavascriptChangeSetReaderTest {
     }
 
     @Test
-    public void testGetChangeSetsNoHeader() throws Exception {
-        List<ChangeSet> changeSets = parse("changeset_noheader.js");
-        // Current behavior is to ignore broken changeset files
-        assertEquals(changeSets.size(), 0);
+    public void testGetChangeSetsNoHeader() throws Exception
+    {
+        assertParseMethodFailure("changeset_noheader.js",
+                "java.text.ParseException: /Users/dtserekhman/Projects/mongeez/target/test-classes/org/mongeez/reader/changeset_noheader.js did not begin with the expected comment:\n" +
+                "//mongeez formatted javascript");
     }
 
     @Test
-    public void testGetChangeSetsEmptyScript() throws Exception {
-        List<ChangeSet> changeSets = parse("changeset_emptyscript.js");
-        // Current behavior is to ignore broken changeset files
-        assertEquals(changeSets.size(), 0);
+    public void testGetChangeSetsEmptyScript() throws Exception
+    {
+        assertParseMethodFailure("changeset_emptyscript.js", "java.text.ParseException: No JavaScript found for changeset joseph:4");
+    }
+
+    private void assertParseMethodFailure(String javascriptFileNameToParse, String expectedExceptionMessage)
+    {
+        try
+        {
+            parse(javascriptFileNameToParse);
+        }
+        catch (MongeezException e)
+        {
+            assertEquals(e.getMessage(), expectedExceptionMessage);
+            return;
+        }
+
+        fail("Expected MongeezException did not occur");
     }
 
     @Test
@@ -141,9 +158,9 @@ public class FormattedJavascriptChangeSetReaderTest {
     }
 
     @Test
-    public void testGetChangeSetsIOFailure() throws Exception {
-        List<ChangeSet> changeSets = parse("changeset_nonexistant.js");
-        assertEquals(changeSets.size(), 0);
+    public void testGetChangeSetsIOFailure() throws Exception
+    {
+        assertParseMethodFailure("changeset_nonexistant.js", "java.io.FileNotFoundException: class path resource [org/mongeez/reader/changeset_nonexistant.js] cannot be opened because it does not exist");
     }
 
     private List<ChangeSet> parse(String fileName) {
