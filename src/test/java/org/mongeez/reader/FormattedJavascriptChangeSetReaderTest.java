@@ -19,8 +19,7 @@ import org.testng.annotations.Test;
 import java.nio.charset.Charset;
 import java.util.List;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.fail;
+import static org.testng.Assert.*;
 
 public class FormattedJavascriptChangeSetReaderTest {
     @Test
@@ -81,9 +80,19 @@ public class FormattedJavascriptChangeSetReaderTest {
     @Test
     public void testGetChangeSetsNoHeader() throws Exception
     {
-        assertParseMethodFailure("changeset_noheader.js",
-                "java.text.ParseException: /Users/dtserekhman/Projects/mongeez/target/test-classes/org/mongeez/reader/changeset_noheader.js did not begin with the expected comment:\n" +
-                "//mongeez formatted javascript");
+        try
+        {
+            parse("changeset_noheader.js");
+        }
+        catch (MongeezException e)
+        {
+            assertTrue(e.getMessage().endsWith("changeset_noheader.js did not begin with the expected comment:\n" +
+                            "//mongeez formatted javascript"));
+
+            return;
+        }
+
+        fail("Expected MongeezException did not occur");
     }
 
     @Test

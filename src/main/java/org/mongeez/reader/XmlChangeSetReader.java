@@ -57,7 +57,7 @@ public class XmlChangeSetReader implements ChangeSetReader {
             logger.info("Parsing XML Change Set File {}", file.getFilename());
             ChangeSetList changeFileSet = (ChangeSetList) digester.parse(file.getInputStream());
             if (changeFileSet == null) {
-                throw new MongeezException("Ignoring change file \"" + file.getFilename() + "\", the parser returned null. Please check your formatting.");
+                throw new MongeezException("Change file \"" + file.getFilename() + "\" could not be parsed. changeFileSet was null. Please check your formatting.");
             }
             else {
                 for (ChangeSet changeSet : changeFileSet.getList()) {
