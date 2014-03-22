@@ -12,15 +12,13 @@
 
 package org.mongeez.reader;
 
+import java.io.File;
+
 import org.mongeez.commands.ChangeSet;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
 class ChangeSetReaderUtil {
-    static void populateChangeSetResourceInfo(ChangeSet changeSet, Resource file) {
-        changeSet.setFile(file.getFilename());
-        if (file instanceof ClassPathResource) {
-            changeSet.setResourcePath(((ClassPathResource) file).getPath());
-        }
-    }
+	static void populateChangeSetResourceInfo(ChangeSet changeSet, File file) {
+		changeSet.setFile(file.getName());
+		changeSet.setResourcePath(file.getPath());
+	}
 }

@@ -13,6 +13,7 @@ messages.log
 /target
 
 # Eclipse files
+/bin
 .project
 .settings
 .classpath

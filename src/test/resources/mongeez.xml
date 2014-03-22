@@ -11,6 +11,6 @@
   -->
 
 <changeFiles>
-    <file path="changeset1.xml"/>
-    <file path="changeset2.xml"/>
+    <file path="src/test/resources/changeset1.xml"/>
+    <file path="src/test/resources/changeset2.xml"/>
 </changeFiles>

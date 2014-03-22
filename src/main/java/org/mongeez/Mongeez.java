@@ -12,23 +12,23 @@
 
 package org.mongeez;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.mongeez.commands.ChangeSet;
 import org.mongeez.commands.Script;
 import org.mongeez.reader.ChangeSetFileProvider;
 import org.mongeez.reader.ChangeSetReaderFactory;
 import org.mongeez.reader.FilesetXMLChangeSetFileProvider;
-
-import com.mongodb.Mongo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.Resource;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.mongodb.Mongo;
 
 
 public class Mongeez {
-    private final static Logger logger = LoggerFactory.getLogger(Mongeez.class);
+    private static final Logger logger = LoggerFactory.getLogger(Mongeez.class);
 
     private Mongo mongo = null;
     private String dbName;
@@ -36,24 +36,24 @@ public class Mongeez {
     private ChangeSetFileProvider changeSetFileProvider;
     private String context = null;
 
-    public void process() {
+    public final void process() {
         List<ChangeSet> changeSets = getChangeSets();
         new ChangeSetExecutor(mongo, dbName, context, auth).execute(changeSets);
     }
 
     private List<ChangeSet> getChangeSets() {
-        List<Resource> files = changeSetFileProvider.getChangeSetFiles();
+        List<File> files = changeSetFileProvider.getChangeSetFiles();
         List<ChangeSet> changeSets = new ArrayList<ChangeSet>();
 
         ChangeSetReaderFactory readerFactory = ChangeSetReaderFactory.getInstance();
-        for (Resource file : files) {
+        for (File file : files) {
             changeSets.addAll(readerFactory.getChangeSetReader(file).getChangeSets(file));
         }
         logChangeSets(changeSets);
         return changeSets;
     }
 
-    private void logChangeSets(List<ChangeSet> changeSets) {
+    private void logChangeSets(final List<ChangeSet> changeSets) {
         if (logger.isTraceEnabled()) {
             for (ChangeSet changeSet : changeSets) {
                 logger.trace("Changeset");
@@ -70,30 +70,30 @@ public class Mongeez {
         }
     }
 
-    public void setMongo(Mongo mongo) {
+    public final void setMongo(final Mongo mongo) {
         this.mongo = mongo;
     }
 
-    public void setDbName(String dbName) {
+    public final void setDbName(final String dbName) {
         this.dbName = dbName;
     }
 
-    public void setAuth(MongoAuth auth) {
+    public final void setAuth(final MongoAuth auth) {
         this.auth = auth;
     }
 
     /**
      * Convenience method to set the ChangeSetFileProvider to an XML fileset based on the specified file
      */
-    public void setFile(Resource file) {
+    public final void setFile(final File file) {
         setChangeSetFileProvider(new FilesetXMLChangeSetFileProvider(file));
     }
 
-    public void setChangeSetFileProvider(ChangeSetFileProvider changeSetFileProvider) {
+    public final void setChangeSetFileProvider(final ChangeSetFileProvider changeSetFileProvider) {
         this.changeSetFileProvider = changeSetFileProvider;
     }
 
-    public void setContext(String context) {
+    public final void setContext(final String context) {
         this.context = context;
     }
 

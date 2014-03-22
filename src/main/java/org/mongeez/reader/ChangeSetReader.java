@@ -12,15 +12,15 @@
 
 package org.mongeez.reader;
 
-import org.mongeez.commands.ChangeSet;
-import org.springframework.core.io.Resource;
-
+import java.io.File;
 import java.util.List;
+
+import org.mongeez.commands.ChangeSet;
 
 public interface ChangeSetReader {
 
-    boolean supports(Resource file);
+	boolean supports(File file);
 
-    List<ChangeSet> getChangeSets(Resource file);
+	List<ChangeSet> getChangeSets(File file);
 
 }

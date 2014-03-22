@@ -12,65 +12,71 @@
 
 package org.mongeez.reader;
 
-import org.mongeez.commands.ChangeSet;
-import org.mongeez.commands.ChangeSetList;
-import org.mongeez.commands.Script;
-
-import org.apache.commons.digester3.Digester;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.core.io.Resource;
-
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.digester3.Digester;
+import org.mongeez.commands.ChangeSet;
+import org.mongeez.commands.ChangeSetList;
+import org.mongeez.commands.Script;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class XmlChangeSetReader implements ChangeSetReader {
-    private static final Logger logger = LoggerFactory.getLogger(XmlChangeSetReader.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(XmlChangeSetReader.class);
 
-    private Digester digester;
+	private Digester digester;
 
-    XmlChangeSetReader() {
-        digester = new Digester();
+	XmlChangeSetReader() {
+		digester = new Digester();
 
-        digester.setValidating(false);
+		digester.setValidating(false);
 
-        digester.addObjectCreate("mongoChangeLog", ChangeSetList.class);
-        digester.addObjectCreate("mongoChangeLog/changeSet", ChangeSet.class);
-        digester.addSetProperties("mongoChangeLog/changeSet");
-        digester.addSetNext("mongoChangeLog/changeSet", "add");
+		digester.addObjectCreate("mongoChangeLog", ChangeSetList.class);
+		digester.addObjectCreate("mongoChangeLog/changeSet", ChangeSet.class);
+		digester.addSetProperties("mongoChangeLog/changeSet");
+		digester.addSetNext("mongoChangeLog/changeSet", "add");
 
-        digester.addObjectCreate("mongoChangeLog/changeSet/script", Script.class);
-        digester.addBeanPropertySetter("mongoChangeLog/changeSet/script", "body");
-        digester.addSetNext("mongoChangeLog/changeSet/script", "add");
-    }
+		digester.addObjectCreate("mongoChangeLog/changeSet/script",
+				Script.class);
+		digester.addBeanPropertySetter("mongoChangeLog/changeSet/script",
+				"body");
+		digester.addSetNext("mongoChangeLog/changeSet/script", "add");
+	}
 
-    @Override
-    public boolean supports(Resource file) {
-        return true;
-    }
+	@Override
+	public boolean supports(File file) {
+		return true;
+	}
 
-    @Override
-    public List<ChangeSet> getChangeSets(Resource file) {
-        List<ChangeSet> changeSets = new ArrayList<ChangeSet>();
+	@Override
+	public List<ChangeSet> getChangeSets(File file) {
+		List<ChangeSet> changeSets = new ArrayList<ChangeSet>();
 
-        try {
-            logger.info("Parsing XML Change Set File {}", file.getFilename());
-            ChangeSetList changeFileSet = (ChangeSetList) digester.parse(file.getInputStream());
-            if (changeFileSet == null) {
-                logger.warn("Ignoring change file {}, the parser returned null. Please check your formatting.", file.getFilename());
-            }
-            else {
-                for (ChangeSet changeSet : changeFileSet.getList()) {
-                    ChangeSetReaderUtil.populateChangeSetResourceInfo(changeSet, file);
-                }
-                changeSets.addAll(changeFileSet.getList());
-            }
-        } catch (IOException e) {
-            logger.error("IOException", e);
-        } catch (org.xml.sax.SAXException e) {
-            logger.error("SAXException", e);
-        }
-        return changeSets;
-    }
+		try {
+			logger.info("Parsing XML Change Set File {}", file.getName());
+			ChangeSetList changeFileSet = (ChangeSetList) digester
+					.parse(new FileInputStream(file.getAbsolutePath()));
+			if (changeFileSet == null) {
+				logger.warn(
+						"Ignoring change file {}, the parser returned null. Please check your formatting.",
+						file.getName());
+			} else {
+				for (ChangeSet changeSet : changeFileSet.getList()) {
+					ChangeSetReaderUtil.populateChangeSetResourceInfo(
+							changeSet, file);
+				}
+				changeSets.addAll(changeFileSet.getList());
+			}
+		} catch (IOException e) {
+			logger.error("IOException", e);
+		} catch (org.xml.sax.SAXException e) {
+			logger.error("SAXException", e);
+		}
+		return changeSets;
+	}
 }
