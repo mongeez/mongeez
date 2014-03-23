@@ -10,18 +10,17 @@
 
 package org.mongeez.reader;
 
-import org.springframework.core.io.Resource;
-
+import java.io.File;
 import java.util.List;
 
 public class FilesetXMLChangeSetFileProvider implements ChangeSetFileProvider {
-    private Resource file;
+	private File file;
 
-    public FilesetXMLChangeSetFileProvider(Resource file) {
-        this.file = file;
-    }
+	public FilesetXMLChangeSetFileProvider(File file) {
+		this.file = file;
+	}
 
-    public List<Resource> getChangeSetFiles() {
-        return new FilesetXMLReader().getFiles(file);
-    }
+	public List<File> getChangeSetFiles() {
+		return new FilesetXMLReader().getFiles(file);
+	}
 }

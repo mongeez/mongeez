@@ -10,8 +10,7 @@
 
 package org.mongeez.reader;
 
-import org.springframework.core.io.Resource;
-
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +32,7 @@ public class ChangeSetReaderFactory {
         return instance;
     }
 
-    public ChangeSetReader getChangeSetReader(Resource file) {
+    public ChangeSetReader getChangeSetReader(File file) {
         for (ChangeSetReader reader : readers) {
             if (reader.supports(file)) return reader;
         }

@@ -10,10 +10,9 @@
 
 package org.mongeez.reader;
 
-import org.springframework.core.io.Resource;
-
+import java.io.File;
 import java.util.List;
 
 public interface ChangeSetFileProvider {
-    List<Resource> getChangeSetFiles();
+    List<File> getChangeSetFiles();
 }

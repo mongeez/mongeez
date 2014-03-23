@@ -11,5 +11,5 @@
   -->
 
 <changeFiles>
-    <file path="failed_changeset.xml"/>
+    <file path="src/test/resources/failed_changeset.xml"/>
 </changeFiles>
