@@ -26,7 +26,7 @@ public class ChangeSet {
     private boolean failOnError = true;
     private boolean runAlways;
 
-    private List<Script> commands = new ArrayList<Script>();
+    private List<Command> commands = new ArrayList<Command>();
 
     public String getChangeId() {
         return changeId;
@@ -76,11 +76,11 @@ public class ChangeSet {
         this.resourcePath = resourcePath;
     }
 
-    public void add(Script command) {
+    public void add(Command command) {
         commands.add(command);
     }
 
-    public List<Script> getCommands() {
+    public List<Command> getCommands() {
         return commands;
     }
     

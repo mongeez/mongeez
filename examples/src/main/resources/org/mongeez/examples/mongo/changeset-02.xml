@@ -28,5 +28,8 @@
             db.Asset.update({}, {$rename: {"assetType": "type"}}, false, true);
         </script>
     </changeSet>
+    <changeSet changeId="SMS-1353 exec bean" author="oleksii">
+        <bean>test</bean>
+    </changeSet>
 
 </mongoChangeLog>

@@ -13,7 +13,7 @@
 package org.mongeez;
 
 import org.mongeez.commands.ChangeSet;
-import org.mongeez.commands.Script;
+import org.mongeez.commands.Command;
 import org.mongeez.reader.ChangeSetFileProvider;
 import org.mongeez.reader.ChangeSetReaderFactory;
 import org.mongeez.reader.FilesetXMLChangeSetFileProvider;
@@ -23,8 +23,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 public class Mongeez {
@@ -35,10 +37,11 @@ public class Mongeez {
     private MongoAuth auth = null;
     private ChangeSetFileProvider changeSetFileProvider;
     private String context = null;
+    private Map<String, CustomMongeezCommand> customCommands;
 
-    public void process() {
+    public void process() throws IOException {
         List<ChangeSet> changeSets = getChangeSets();
-        new ChangeSetExecutor(mongo, dbName, context, auth).execute(changeSets);
+        new ChangeSetExecutor(mongo, dbName, context, auth, customCommands).execute(changeSets);
     }
 
     private List<ChangeSet> getChangeSets() {
@@ -62,9 +65,9 @@ public class Mongeez {
                 if (! "".equals(changeSet.getContexts())) {
                     logger.trace("contexts: {}", changeSet.getContexts());
                 }
-                for (Script command : changeSet.getCommands()) {
-                    logger.trace("script");
-                    logger.trace(command.getBody());
+                for (Command command : changeSet.getCommands()) {
+                    logger.trace("command");
+                    logger.trace(command.toString());
                 }
             }
         }
@@ -97,4 +100,7 @@ public class Mongeez {
         this.context = context;
     }
 
+    public void setCustomCommands(Map<String, CustomMongeezCommand> customCommands) {
+        this.customCommands = customCommands;
+    }
 }

@@ -133,4 +133,8 @@ public class MongeezDao {
         object.append("date", DateFormatUtils.ISO_DATETIME_TIME_ZONE_FORMAT.format(System.currentTimeMillis()));
         getMongeezCollection().insert(object, WriteConcern.SAFE);
     }
+
+    public DB getDb() {
+        return db;
+    }
 }

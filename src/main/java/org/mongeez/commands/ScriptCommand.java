@@ -11,13 +11,16 @@
  */
 package org.mongeez.commands;
 
+import org.mongeez.CustomMongeezCommand;
 import org.mongeez.dao.MongeezDao;
+
+import java.util.Map;
 
 /**
  * @author oleksii
  * @since 5/3/11
  */
-public class Script {
+public class ScriptCommand implements Command {
     private String body;
 
     public String getBody() {
@@ -28,7 +31,13 @@ public class Script {
         this.body = body;
     }
 
-    public void run(MongeezDao dao) {
+    @Override
+    public void run(MongeezDao dao, Map<String, CustomMongeezCommand> beanFactory) {
         dao.runScript(body);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("script: {%s}", body);
     }
 }

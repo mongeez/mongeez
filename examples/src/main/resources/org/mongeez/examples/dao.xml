@@ -15,6 +15,11 @@
         <property name="mongo" ref="mongo"/>
         <property name="dbName" value="assets"/>
         <property name="file" value="classpath:org/mongeez/examples/mongo/mongeez.xml"/>
+        <property name="customCommands">
+            <map>
+                <entry key="test"><bean class="org.mongeez.examples.dao.TestMongeezCommand"/></entry>
+            </map>
+        </property>
     </bean>
 
     <!-- Morphia setup -->

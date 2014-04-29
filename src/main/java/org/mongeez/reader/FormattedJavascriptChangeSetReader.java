@@ -11,10 +11,11 @@
 package org.mongeez.reader;
 
 import org.mongeez.commands.ChangeSet;
-import org.mongeez.commands.Script;
 
+import org.mongeez.commands.ScriptCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.core.io.Resource;
 
 import java.io.BufferedReader;
@@ -115,9 +116,9 @@ public class FormattedJavascriptChangeSetReader implements ChangeSetReader {
             if (body.trim().isEmpty()) {
                 throw new ParseException("No JavaScript found for changeset " + toString(changeSet), -1);
             }
-            Script script = new Script();
-            script.setBody(body);
-            changeSet.add(script);
+            ScriptCommand command = new ScriptCommand();
+            command.setBody(body);
+            changeSet.add(command);
         }
     }
 

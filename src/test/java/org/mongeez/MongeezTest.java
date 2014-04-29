@@ -15,7 +15,6 @@ package org.mongeez;
 import static org.testng.Assert.assertEquals;
 
 import com.mongodb.DB;
-import com.mongodb.DBCursor;
 import com.mongodb.Mongo;
 import org.springframework.core.io.ClassPathResource;
 import org.testng.annotations.BeforeMethod;
