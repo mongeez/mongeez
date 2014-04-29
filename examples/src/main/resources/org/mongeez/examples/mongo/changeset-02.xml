@@ -29,7 +29,11 @@
         </script>
     </changeSet>
     <changeSet changeId="SMS-1353 exec bean" author="oleksii">
-        <bean>test</bean>
+        <bean ref="test"/>
+        <bean ref="test">
+            test2a=kweenie
+            test2b=kweenie
+        </bean>
     </changeSet>
 
 </mongoChangeLog>

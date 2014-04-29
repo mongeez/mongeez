@@ -15,6 +15,7 @@ import java.util.Properties;
 public class TestMongeezCommand implements CustomMongeezCommand {
     @Override
     public void run(MongeezDao dao, Properties props) {
+
         dao.runScript("db.testM.insert({test:true});");
     }
 }

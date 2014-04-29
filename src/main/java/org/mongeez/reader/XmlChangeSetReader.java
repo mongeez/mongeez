@@ -20,7 +20,6 @@ import org.apache.commons.digester3.Digester;
 import org.mongeez.commands.ScriptCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.BeanFactory;
 import org.springframework.core.io.Resource;
 
 import java.io.IOException;
@@ -47,7 +46,7 @@ public class XmlChangeSetReader implements ChangeSetReader {
         digester.addSetNext("mongoChangeLog/changeSet/script", "add");
 
         digester.addObjectCreate("mongoChangeLog/changeSet/bean", BeanCommand.class);
-        digester.addBeanPropertySetter("mongoChangeLog/changeSet/bean", "ref");
+        digester.addSetProperties("mongoChangeLog/changeSet/bean");
         digester.addBeanPropertySetter("mongoChangeLog/changeSet/bean", "props");
         digester.addSetNext("mongoChangeLog/changeSet/bean", "add");
     }

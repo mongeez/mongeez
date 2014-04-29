@@ -15,7 +15,6 @@ import org.mongeez.commands.ChangeSet;
 import org.mongeez.commands.ScriptCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.BeanFactory;
 import org.springframework.core.io.Resource;
 
 import java.io.BufferedReader;
