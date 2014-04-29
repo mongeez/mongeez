@@ -10,3 +10,4 @@ messages.log
 *.iml
 *.ipr
 *.iws
+target/

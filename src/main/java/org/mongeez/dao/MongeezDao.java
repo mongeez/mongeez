@@ -36,9 +36,23 @@ public class MongeezDao {
     }
 
     public MongeezDao(Mongo mongo, String databaseName, MongoAuth auth) {
-        db = mongo.getDB(databaseName);
+
         if (auth != null){
-        	db.authenticate(auth.getUsername(), auth.getPassword().toCharArray());
+            if(auth.getAuthDb() == null || auth.getAuthDb().equals(databaseName))
+            {
+                db = mongo.getDB(databaseName);
+                db.authenticate(auth.getUsername(), auth.getPassword().toCharArray());
+            }
+            else
+            {
+                DB authDb = mongo.getDB(auth.getAuthDb());
+                authDb.authenticate(auth.getUsername(), auth.getPassword().toCharArray());
+                db = mongo.getDB(databaseName);
+            }
+        }
+        else
+        {
+            db = mongo.getDB(databaseName);
         }
         configure();
     }
