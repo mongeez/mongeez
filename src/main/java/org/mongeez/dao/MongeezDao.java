@@ -41,13 +41,17 @@ public class MongeezDao {
             if(auth.getAuthDb() == null || auth.getAuthDb().equals(databaseName))
             {
                 db = mongo.getDB(databaseName);
-                db.authenticate(auth.getUsername(), auth.getPassword().toCharArray());
+                if (!db.authenticate(auth.getUsername(), auth.getPassword().toCharArray())) {
+                    throw new IllegalArgumentException("Failed to authenticate to database [" + databaseName + "]");
+                }
             }
             else
             {
-                DB authDb = mongo.getDB(auth.getAuthDb());
-                authDb.authenticate(auth.getUsername(), auth.getPassword().toCharArray());
                 db = mongo.getDB(databaseName);
+                DB authDb = mongo.getDB(auth.getAuthDb());
+                if (!authDb.authenticate(auth.getUsername(), auth.getPassword().toCharArray())) {
+                    throw new IllegalArgumentException("Failed to authenticate to database [" + auth.getAuthDb() + "]");
+                }
             }
         }
         else
