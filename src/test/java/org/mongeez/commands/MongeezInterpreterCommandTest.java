@@ -1,7 +1,6 @@
 package org.mongeez.commands;
 
 import com.mongodb.DBObject;
-import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;

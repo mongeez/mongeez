@@ -39,30 +39,9 @@ public class MongeezDaoImpl implements MongeezDao {
     }
 
     public MongeezDaoImpl(Mongo mongo, String databaseName, MongoAuth auth) {
-
+        db = mongo.getDB(databaseName);
         if (auth != null){
-            if(auth.getAuthDb() == null || auth.getAuthDb().equals(databaseName)) {
-                db = mongo.getDB(databaseName);
-                if(!db.isAuthenticated()) {
-                    if (!db.authenticate(auth.getUsername(), auth.getPassword().toCharArray())) {
-                        throw new IllegalArgumentException("Failed to authenticate to database [" + databaseName + "]");
-                    }
-                }
-            }
-            else
-            {
-                db = mongo.getDB(databaseName);
-                if(!db.isAuthenticated()) {
-                    DB authDb = mongo.getDB(auth.getAuthDb());
-                    if (!authDb.authenticate(auth.getUsername(), auth.getPassword().toCharArray())) {
-                        throw new IllegalArgumentException("Failed to authenticate to database [" + auth.getAuthDb() + "]");
-                    }
-                }
-            }
-        }
-        else
-        {
-            db = mongo.getDB(databaseName);
+        	db.authenticate(auth.getUsername(), auth.getPassword().toCharArray());
         }
         configure();
     }
