@@ -30,6 +30,7 @@ public class MongeezRunner implements InitializingBean {
     
     private String userName;
     private String passWord;
+    private String authDb;
     
     private ChangeSetFileProvider changeSetFileProvider;
 
@@ -50,7 +51,7 @@ public class MongeezRunner implements InitializingBean {
             mongeez.setFile(file);
             
             if(!StringUtils.isEmpty(userName) && !StringUtils.isEmpty(passWord)){
-            	MongoAuth auth = new MongoAuth(userName, passWord);
+            	MongoAuth auth = new MongoAuth(userName, passWord, authDb);
                 mongeez.setAuth(auth);
             }
         }
@@ -93,5 +94,8 @@ public class MongeezRunner implements InitializingBean {
 	public void setPassWord(String passWord) {
 		this.passWord = passWord;
 	}
-    
+
+    public void setAuthDb(String authDb) {
+        this.authDb = authDb;
+    }
 }

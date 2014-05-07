@@ -36,9 +36,27 @@ public class MongeezDao {
     }
 
     public MongeezDao(Mongo mongo, String databaseName, MongoAuth auth) {
-        db = mongo.getDB(databaseName);
+
         if (auth != null){
-        	db.authenticate(auth.getUsername(), auth.getPassword().toCharArray());
+            if(auth.getAuthDb() == null || auth.getAuthDb().equals(databaseName))
+            {
+                db = mongo.getDB(databaseName);
+                if (!db.authenticate(auth.getUsername(), auth.getPassword().toCharArray())) {
+                    throw new IllegalArgumentException("Failed to authenticate to database [" + databaseName + "]");
+                }
+            }
+            else
+            {
+                db = mongo.getDB(databaseName);
+                DB authDb = mongo.getDB(auth.getAuthDb());
+                if (!authDb.authenticate(auth.getUsername(), auth.getPassword().toCharArray())) {
+                    throw new IllegalArgumentException("Failed to authenticate to database [" + auth.getAuthDb() + "]");
+                }
+            }
+        }
+        else
+        {
+            db = mongo.getDB(databaseName);
         }
         configure();
     }
