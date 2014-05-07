@@ -14,6 +14,9 @@ package org.mongeez;
 
 import org.mongeez.commands.ChangeSet;
 import org.mongeez.commands.Command;
+import org.mongeez.commands.CustomMongeezCommand;
+import org.mongeez.dao.MongeezDao;
+import org.mongeez.dao.impl.MongeezDaoImpl;
 import org.mongeez.reader.ChangeSetFileProvider;
 import org.mongeez.reader.ChangeSetReaderFactory;
 import org.mongeez.reader.FilesetXMLChangeSetFileProvider;
@@ -41,7 +44,8 @@ public class Mongeez {
 
     public void process() throws IOException {
         List<ChangeSet> changeSets = getChangeSets();
-        new ChangeSetExecutor(mongo, dbName, context, auth, customCommands).execute(changeSets);
+        MongeezDao dao = new MongeezDaoImpl(mongo, dbName, auth);
+        new ChangeSetExecutor(dao, context, customCommands).execute(changeSets);
     }
 
     private List<ChangeSet> getChangeSets() {

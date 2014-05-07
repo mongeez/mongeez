@@ -1,4 +1,4 @@
-package org.mongeez;
+package org.mongeez.commands;
 
 import org.mongeez.dao.MongeezDao;
 

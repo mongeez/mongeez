@@ -13,6 +13,7 @@ package org.mongeez;
 
 import com.mongodb.Mongo;
 import org.apache.commons.lang3.StringUtils;
+import org.mongeez.commands.CustomMongeezCommand;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.Resource;

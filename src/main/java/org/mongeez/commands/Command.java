@@ -1,6 +1,5 @@
 package org.mongeez.commands;
 
-import org.mongeez.CustomMongeezCommand;
 import org.mongeez.dao.MongeezDao;
 
 import java.io.IOException;

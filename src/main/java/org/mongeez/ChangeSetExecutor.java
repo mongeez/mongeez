@@ -14,9 +14,11 @@ package org.mongeez;
 
 import org.mongeez.commands.ChangeSet;
 import org.mongeez.commands.Command;
-import org.mongeez.dao.MongeezDao;
 
 import com.mongodb.Mongo;
+import org.mongeez.commands.CustomMongeezCommand;
+import org.mongeez.dao.MongeezDao;
+import org.mongeez.dao.impl.MongeezDaoImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,10 +34,10 @@ public class ChangeSetExecutor {
     private MongeezDao dao = null;
     private String context = null;
 
-    public ChangeSetExecutor(Mongo mongo, String dbName, String context, MongoAuth auth, Map<String, CustomMongeezCommand> beanFactory) {
-        dao = new MongeezDao(mongo, dbName, auth);
-        this.context = context;
+    public ChangeSetExecutor(MongeezDao dao, String context, Map<String, CustomMongeezCommand> beanFactory) {
         this.beanFactory = beanFactory;
+        this.dao = dao;
+        this.context = context;
     }
 
     public void execute(List<ChangeSet> changeSets) throws IOException {

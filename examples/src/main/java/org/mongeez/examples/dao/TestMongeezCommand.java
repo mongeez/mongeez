@@ -1,6 +1,6 @@
 package org.mongeez.examples.dao;
 
-import org.mongeez.CustomMongeezCommand;
+import org.mongeez.commands.CustomMongeezCommand;
 import org.mongeez.dao.MongeezDao;
 
 import java.util.Properties;
