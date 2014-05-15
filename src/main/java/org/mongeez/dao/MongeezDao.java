@@ -4,7 +4,7 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at  http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
@@ -12,16 +12,8 @@
 
 package org.mongeez.dao;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
-import com.mongodb.Mongo;
-import com.mongodb.QueryBuilder;
-import com.mongodb.WriteConcern;
+import com.mongodb.*;
 import org.apache.commons.lang3.time.DateFormatUtils;
-
-import org.mongeez.MongoAuth;
 import org.mongeez.commands.ChangeSet;
 
 import java.util.ArrayList;
@@ -31,15 +23,8 @@ public class MongeezDao {
     private DB db;
     private List<ChangeSetAttribute> changeSetAttributes;
 
-    public MongeezDao(Mongo mongo, String databaseName) {
-        this(mongo, databaseName, null);
-    }
-
-    public MongeezDao(Mongo mongo, String databaseName, MongoAuth auth) {
+    public MongeezDao(MongoClient mongo, String databaseName) {
         db = mongo.getDB(databaseName);
-        if (auth != null){
-        	db.authenticate(auth.getUsername(), auth.getPassword().toCharArray());
-        }
         configure();
     }
 
@@ -104,7 +89,7 @@ public class MongeezDao {
         for (ChangeSetAttribute attribute : changeSetAttributes) {
             keys.append(attribute.name(), 1);
         }
-        getMongeezCollection().ensureIndex(keys);
+        getMongeezCollection().createIndex(keys);
     }
 
     public boolean wasExecuted(ChangeSet changeSet) {

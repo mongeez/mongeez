@@ -4,7 +4,7 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at  http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
@@ -18,7 +18,7 @@ import org.mongeez.reader.ChangeSetFileProvider;
 import org.mongeez.reader.ChangeSetReaderFactory;
 import org.mongeez.reader.FilesetXMLChangeSetFileProvider;
 
-import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -30,15 +30,14 @@ import java.util.List;
 public class Mongeez {
     private final static Logger logger = LoggerFactory.getLogger(Mongeez.class);
 
-    private Mongo mongo = null;
+    private MongoClient mongo = null;
     private String dbName;
-    private MongoAuth auth = null;
     private ChangeSetFileProvider changeSetFileProvider;
     private String context = null;
 
     public void process() {
         List<ChangeSet> changeSets = getChangeSets();
-        new ChangeSetExecutor(mongo, dbName, context, auth).execute(changeSets);
+        new ChangeSetExecutor(mongo, dbName, context).execute(changeSets);
     }
 
     private List<ChangeSet> getChangeSets() {
@@ -70,16 +69,12 @@ public class Mongeez {
         }
     }
 
-    public void setMongo(Mongo mongo) {
+    public void setMongo(MongoClient mongo) {
         this.mongo = mongo;
     }
 
     public void setDbName(String dbName) {
         this.dbName = dbName;
-    }
-
-    public void setAuth(MongoAuth auth) {
-        this.auth = auth;
     }
 
     /**

@@ -1,6 +1,6 @@
 package org.mongeez.examples.dto;
 
-import com.google.code.morphia.annotations.Entity;
+import org.mongodb.morphia.annotations.Entity;
 
 @Entity(value = "Asset", concern = "SAFE")
 public class PrivatePreferredStock extends Asset {

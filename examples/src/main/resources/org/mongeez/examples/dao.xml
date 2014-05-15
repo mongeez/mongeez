@@ -3,10 +3,10 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-    <bean id="mongoUri" class="com.mongodb.MongoURI">
+    <bean id="mongoUri" class="com.mongodb.MongoClientURI">
         <constructor-arg value="mongodb://localhost/assets"/>
     </bean>
-    <bean id="mongo" class="com.mongodb.Mongo">
+    <bean id="mongo" class="com.mongodb.MongoClient">
         <constructor-arg ref="mongoUri"/>
     </bean>
 
@@ -18,10 +18,10 @@
     </bean>
 
     <!-- Morphia setup -->
-    <bean id="morphia" class="com.google.code.morphia.Morphia" depends-on="mongeez"/>
+    <bean id="morphia" class="org.mongodb.morphia.Morphia" depends-on="mongeez"/>
 
     <bean id="mongoDatastore" factory-bean="morphia" factory-method="createDatastore">
-        <constructor-arg ref="mongo"/>
-        <constructor-arg value="assets"/>
+        <constructor-arg name="mongo" ref="mongo"/>
+        <constructor-arg name="dbName" value="assets"/>
     </bean>
 </beans>
