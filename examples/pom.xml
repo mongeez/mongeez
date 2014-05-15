@@ -10,18 +10,18 @@
         <dependency>
             <groupId>org.mongeez</groupId>
             <artifactId>mongeez</artifactId>
-            <version>0.9.3-SNAPSHOT</version>
+            <version>0.9.5-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>
-            <version>2.9.3</version>
+            <version>2.12.1</version>
         </dependency>
         <dependency>
-            <groupId>com.google.code.morphia</groupId>
+            <groupId>org.mongodb.morphia</groupId>
             <artifactId>morphia</artifactId>
-            <version>0.99</version>
+            <version>0.107</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.mongodb</groupId>
@@ -96,17 +96,6 @@
             <releases>
                 <enabled>false</enabled>
             </releases>
-        </repository>
-
-        <!--this repo is used to get the latest morphia (it's still not in maven Central)-->
-        <!--morphia is not used by mongeez. it's used in this example just to simplify crud operations-->
-        <repository>
-            <id>morphia.googlecode.com</id>
-            <name>Morphia Repo at Google Code</name>
-            <url>http://morphia.googlecode.com/svn/mavenrepo</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
         </repository>
     </repositories>
 
