@@ -11,6 +11,7 @@
 package org.mongeez.reader;
 
 import org.mongeez.commands.ChangeSet;
+import org.mongeez.commands.ScriptCommand;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.testng.annotations.Test;
@@ -165,6 +166,6 @@ public class FormattedJavascriptChangeSetReaderTest {
         assertEquals(actual.isRunAlways(), expectedRunAlways);
         assertEquals(actual.getFile(), expectedFile);
         assertEquals(actual.getCommands().size(), 1);
-        assertEquals(actual.getCommands().get(0).getBody(), expectedBody);
+        assertEquals(((ScriptCommand)actual.getCommands().get(0)).getBody(), expectedBody);
     }
 }

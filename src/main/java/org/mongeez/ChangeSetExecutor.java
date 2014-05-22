@@ -13,32 +13,34 @@
 package org.mongeez;
 
 import org.mongeez.commands.ChangeSet;
-import org.mongeez.commands.Script;
-import org.mongeez.dao.MongeezDao;
+import org.mongeez.commands.Command;
 
 import com.mongodb.Mongo;
+import org.mongeez.commands.CustomMongeezCommand;
+import org.mongeez.dao.MongeezDao;
+import org.mongeez.dao.impl.MongeezDaoImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 
 public class ChangeSetExecutor {
     private final Logger logger = LoggerFactory.getLogger(ChangeSetExecutor.class);
+    private final Map<String, CustomMongeezCommand> beanFactory;
 
     private MongeezDao dao = null;
     private String context = null;
 
-    public ChangeSetExecutor(Mongo mongo, String dbName, String context) {
-        this(mongo, dbName, context, null);
-    }
-
-    public ChangeSetExecutor(Mongo mongo, String dbName, String context, MongoAuth auth) {
-        dao = new MongeezDao(mongo, dbName, auth);
+    public ChangeSetExecutor(MongeezDao dao, String context, Map<String, CustomMongeezCommand> beanFactory) {
+        this.beanFactory = beanFactory;
+        this.dao = dao;
         this.context = context;
     }
 
-    public void execute(List<ChangeSet> changeSets) {
+    public void execute(List<ChangeSet> changeSets) throws IOException {
         for (ChangeSet changeSet : changeSets) {
             if (changeSet.canBeAppliedInContext(context)) {
                 if (changeSet.isRunAlways() || !dao.wasExecuted(changeSet)) {
@@ -54,12 +56,18 @@ public class ChangeSetExecutor {
         }
     }
 
-    private void execute(ChangeSet changeSet) {
+    private void execute(ChangeSet changeSet) throws IOException {
         try {
-            for (Script command : changeSet.getCommands()) {
-                command.run(dao);
+            for (Command command : changeSet.getCommands()) {
+                command.run(dao, beanFactory);
             }
         } catch (RuntimeException e) {
+            if (changeSet.isFailOnError()) {
+                throw e;
+            } else {
+                logger.warn("ChangeSet " + changeSet.getChangeId() + " has failed, but failOnError is set to false", e.getMessage());
+            }
+        } catch (IOException e) {
             if (changeSet.isFailOnError()) {
                 throw e;
             } else {

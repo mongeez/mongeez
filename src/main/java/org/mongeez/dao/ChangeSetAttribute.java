@@ -16,22 +16,22 @@ import org.mongeez.commands.ChangeSet;
 
 public enum ChangeSetAttribute {
     file() {
-        String getAttributeValue(ChangeSet changeSet) {
+        public String getAttributeValue(ChangeSet changeSet) {
             return changeSet.getFile();
         }
     }, changeId() {
-        String getAttributeValue(ChangeSet changeSet) {
+        public String getAttributeValue(ChangeSet changeSet) {
             return changeSet.getChangeId();
         }
     }, author() {
-        String getAttributeValue(ChangeSet changeSet) {
+        public String getAttributeValue(ChangeSet changeSet) {
             return changeSet.getAuthor();
         }
     }, resourcePath() {
-        String getAttributeValue(ChangeSet changeSet) {
+        public String getAttributeValue(ChangeSet changeSet) {
             return changeSet.getResourcePath();
         }
     };
 
-    abstract String getAttributeValue(ChangeSet changeSet);
+    abstract public String getAttributeValue(ChangeSet changeSet);
 }

@@ -12,11 +12,12 @@
 
 package org.mongeez.reader;
 
+import org.mongeez.commands.BeanCommand;
 import org.mongeez.commands.ChangeSet;
 import org.mongeez.commands.ChangeSetList;
-import org.mongeez.commands.Script;
 
 import org.apache.commons.digester3.Digester;
+import org.mongeez.commands.ScriptCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
@@ -40,9 +41,14 @@ public class XmlChangeSetReader implements ChangeSetReader {
         digester.addSetProperties("mongoChangeLog/changeSet");
         digester.addSetNext("mongoChangeLog/changeSet", "add");
 
-        digester.addObjectCreate("mongoChangeLog/changeSet/script", Script.class);
+        digester.addObjectCreate("mongoChangeLog/changeSet/script", ScriptCommand.class);
         digester.addBeanPropertySetter("mongoChangeLog/changeSet/script", "body");
         digester.addSetNext("mongoChangeLog/changeSet/script", "add");
+
+        digester.addObjectCreate("mongoChangeLog/changeSet/bean", BeanCommand.class);
+        digester.addSetProperties("mongoChangeLog/changeSet/bean");
+        digester.addBeanPropertySetter("mongoChangeLog/changeSet/bean", "props");
+        digester.addSetNext("mongoChangeLog/changeSet/bean", "add");
     }
 
     @Override
