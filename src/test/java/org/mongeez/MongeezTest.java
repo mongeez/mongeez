@@ -104,8 +104,7 @@ public class MongeezTest {
         assertEquals(db.getCollection("mongeez").count(), 1);
     }
 
-    @Ignore
-    @Test(groups = "dao")
+    @Test(groups = "dao", enabled = false)
     public void testChangesWContextContextNotSet() throws Exception {
         assertEquals(db.getCollection("mongeez").count(), 0);
 
@@ -118,8 +117,7 @@ public class MongeezTest {
         assertEquals(db.getCollection("house").count(), 0);
     }
 
-    @Ignore
-    @Test(groups = "dao")
+    @Test(groups = "dao", enabled = false)
     public void testChangesWContextContextSetToUsers() throws Exception {
         assertEquals(db.getCollection("mongeez").count(), 0);
 
@@ -133,8 +131,7 @@ public class MongeezTest {
         assertEquals(db.getCollection("house").count(), 2);
     }
 
-    @Ignore
-    @Test(groups = "dao")
+    @Test(groups = "dao", enabled = false)
     public void testChangesWContextContextSetToOrganizations() throws Exception {
         assertEquals(db.getCollection("mongeez").count(), 0);
 
