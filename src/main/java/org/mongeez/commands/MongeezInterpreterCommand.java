@@ -4,6 +4,8 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.util.JSON;
 import org.mongeez.dao.MongeezDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
 import java.util.regex.Matcher;
@@ -16,6 +18,7 @@ import java.util.regex.Pattern;
  * @since 7/05/2014
  */
 public class MongeezInterpreterCommand implements CustomMongeezCommand {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MongeezInterpreterCommand.class);
 
     public static final Pattern PATTERN = Pattern.compile("db\\.(\\w+)\\.(\\w+)(\\.\\d+)?");
 
@@ -24,6 +27,7 @@ public class MongeezInterpreterCommand implements CustomMongeezCommand {
         for (String key : props.stringPropertyNames()) {
             final Matcher matcher = PATTERN.matcher(key);
             if (matcher.matches()) {
+                LOGGER.info("Executing {}", key);
                 String collection = matcher.group(1);
                 String operation = matcher.group(2);
                 final String value = props.getProperty(key);
@@ -31,17 +35,24 @@ public class MongeezInterpreterCommand implements CustomMongeezCommand {
                     updateCollection(dao, collection, value);
                 } else if ("insert".equals(operation)) {
                     insertCollection(dao, collection, value);
+                } else if ("ensureIndex".equals(operation)) {
+                    ensureIndex(dao, collection, value);
+                } else {
+                    LOGGER.warn("Unknown operation: {}", key);
                 }
             }
+            LOGGER.warn("Unparseable property: {}", key);
         }
     }
 
-    private void insertCollection(MongeezDao dao, String collection, String value) {
+    private void ensureIndex(MongeezDao dao, String collection, String value) {
         final DBObject params = (DBObject) JSON.parse(value);
-        dao.insertCollection(collection, params);
+        final DBObject keys = (DBObject) params.get("keys");
+        final DBObject options = (DBObject) params.get("options");
+        dao.ensureIndex(collection, keys, options);
     }
 
-    private void aggregateCollection(MongeezDao dao, String collection, String value) {
+    private void insertCollection(MongeezDao dao, String collection, String value) {
         final DBObject params = (DBObject) JSON.parse(value);
         dao.insertCollection(collection, params);
     }

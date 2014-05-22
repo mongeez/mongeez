@@ -28,4 +28,6 @@ public interface MongeezDao {
     boolean wasExecuted(ChangeSet changeSet);
 
     void logChangeSet(ChangeSet changeSet);
+
+    void ensureIndex(String collection, DBObject params, DBObject options);
 }

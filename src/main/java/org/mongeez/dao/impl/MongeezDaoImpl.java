@@ -141,6 +141,11 @@ public class MongeezDaoImpl implements MongeezDao {
     }
 
     @Override
+    public void ensureIndex(String collection, DBObject keys, DBObject options) {
+        getDb().getCollection(collection).ensureIndex(keys, options);
+    }
+
+    @Override
     public DB getDb() {
         return db;
     }
