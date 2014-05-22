@@ -16,6 +16,7 @@ import static org.testng.Assert.assertEquals;
 
 import com.mongodb.DB;
 import com.mongodb.Mongo;
+import org.junit.Ignore;
 import org.springframework.core.io.ClassPathResource;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -103,6 +104,7 @@ public class MongeezTest {
         assertEquals(db.getCollection("mongeez").count(), 1);
     }
 
+    @Ignore
     @Test(groups = "dao")
     public void testChangesWContextContextNotSet() throws Exception {
         assertEquals(db.getCollection("mongeez").count(), 0);
@@ -116,6 +118,7 @@ public class MongeezTest {
         assertEquals(db.getCollection("house").count(), 0);
     }
 
+    @Ignore
     @Test(groups = "dao")
     public void testChangesWContextContextSetToUsers() throws Exception {
         assertEquals(db.getCollection("mongeez").count(), 0);
@@ -130,6 +133,7 @@ public class MongeezTest {
         assertEquals(db.getCollection("house").count(), 2);
     }
 
+    @Ignore
     @Test(groups = "dao")
     public void testChangesWContextContextSetToOrganizations() throws Exception {
         assertEquals(db.getCollection("mongeez").count(), 0);
