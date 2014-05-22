@@ -56,7 +56,7 @@ public class MongeezDaoImpl implements MongeezDao {
     private void addTypeToUntypedRecords() {
         DBObject q = new QueryBuilder().put("type").exists(false).get();
         BasicDBObject o = new BasicDBObject("$set", new BasicDBObject("type", RecordType.changeSetExecution.name()));
-        getMongeezCollection().update(q, o, false, true, WriteConcern.MAJORITY);
+        getMongeezCollection().update(q, o, false, true, WriteConcern.JOURNALED);
     }
 
     private void loadConfigurationRecord() {
