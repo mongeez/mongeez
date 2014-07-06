@@ -39,6 +39,9 @@ public class FormattedJavascriptChangeSetReader implements ChangeSetReader {
     private static final Pattern ATTRIBUTE_RUN_ALWAYS_PATTERN =
             Pattern.compile(".*runAlways:(\\w+).*",
                     Pattern.CASE_INSENSITIVE);
+    private static final Pattern ATTRIBUTE_CONTEXT_PATTERN =
+            Pattern.compile(".*context:([\\w,]+).*",
+                    Pattern.CASE_INSENSITIVE);
 
     private static final Logger logger = LoggerFactory.getLogger(FormattedJavascriptChangeSetReader.class);
 
@@ -141,6 +144,7 @@ public class FormattedJavascriptChangeSetReader implements ChangeSetReader {
             changeSet.setAuthor(changeSetMatcher.group(1));
             changeSet.setChangeId(changeSetMatcher.group(2));
             changeSet.setRunAlways(parseAttribute(ATTRIBUTE_RUN_ALWAYS_PATTERN.matcher(line), false));
+            changeSet.setContexts(parseOptions(ATTRIBUTE_CONTEXT_PATTERN.matcher(line), ""));
         }
         return changeSet;
     }
@@ -150,6 +154,16 @@ public class FormattedJavascriptChangeSetReader implements ChangeSetReader {
         if (attributeMatcher.matches()) {
             attributeValue = Boolean.parseBoolean(attributeMatcher.group(1));
         }
+        return attributeValue;
+    }
+
+    private String parseOptions(Matcher attributeMatcher, String defaultValue) {
+        String attributeValue = defaultValue;
+
+        if (attributeMatcher.matches()) {
+            attributeValue = attributeMatcher.group(1);
+        }
+
         return attributeValue;
     }
 

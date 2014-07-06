@@ -18,7 +18,7 @@ import org.testng.annotations.Test;
 import java.nio.charset.Charset;
 import java.util.List;
 
-import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.*;
 
 public class FormattedJavascriptChangeSetReaderTest {
     @Test
@@ -144,6 +144,35 @@ public class FormattedJavascriptChangeSetReaderTest {
     public void testGetChangeSetsIOFailure() throws Exception {
         List<ChangeSet> changeSets = parse("changeset_nonexistant.js");
         assertEquals(changeSets.size(), 0);
+    }
+
+    @Test
+    public void testContextOption() throws Exception {
+        List<ChangeSet> changeSets = parse("changeset_context1.js");
+
+        // changeset shin:ChangeSet-1
+        // runs in all contexts including test
+        assertTrue(changeSets.get(0).canBeAppliedInContext(null));
+        assertTrue(changeSets.get(0).canBeAppliedInContext("test"));
+
+        // changeset shin:ChangeSet-3 runAlways:true context:test
+        // runs in test context only and not by default
+        assertTrue(changeSets.get(2).isRunAlways());
+        assertEquals(changeSets.get(2).getContexts(), "test");
+        assertFalse(changeSets.get(2).canBeAppliedInContext(null));
+        assertFalse(changeSets.get(2).canBeAppliedInContext("production"));
+        assertTrue(changeSets.get(2).canBeAppliedInContext("test"));
+        assertFalse(changeSets.get(2).canBeAppliedInContext("staging"));
+
+        // changeset shin:ChangeSet-4 runAlways:true context:test,staging
+        // runs in multiple contexts but still not by the default context
+        assertEquals(changeSets.get(3).getContexts(), "test,staging");
+        assertFalse(changeSets.get(3).canBeAppliedInContext(null));
+        assertFalse(changeSets.get(3).canBeAppliedInContext("production"));
+        assertTrue(changeSets.get(3).canBeAppliedInContext("test"));
+        assertTrue(changeSets.get(3).canBeAppliedInContext("staging"));
+
+        assertEquals(changeSets.size(), 4);
     }
 
     private List<ChangeSet> parse(String fileName) {
