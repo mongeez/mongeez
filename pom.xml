@@ -7,9 +7,9 @@
         <version>7</version>
     </parent>
     
-    <groupId>org.mongeez</groupId>
+    <groupId>org.endource</groupId>
     <artifactId>mongeez</artifactId>
-    <version>0.9.5-SNAPSHOT</version>
+    <version>0.9.5</version>
     <packaging>jar</packaging>
 
     <name>Mongeez</name>
@@ -25,10 +25,19 @@
     </licenses>
 
     <scm>
-        <connection>scm:git:git@github.com:secondmarket/mongeez.git</connection>
-        <developerConnection>scm:git:git@github.com:secondmarket/mongeez.git</developerConnection>
-        <url>git@github.com:secondmarket/mongeez.git</url>
-    </scm>
+        <connection>scm:git:git@github.com:shin-nien/mongeez.git</connection>
+        <developerConnection>scm:git:git@github.com:shin-nien/mongeez.git</developerConnection>
+        <url>git@github.com:shin-nien/mongeez.git</url>
+      <tag>mongeez-0.9.5</tag>
+  </scm>
+
+    <distributionManagement>
+        <repository>
+            <id>bintray-endource-maven-mongeez</id>
+            <name>endource-maven-mongeez</name>
+            <url>https://api.bintray.com/maven/endource/maven/mongeez</url>
+        </repository>
+    </distributionManagement>
 
     <developers>
         <developer>
@@ -118,6 +127,56 @@
                     <target>${java.version}</target>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5</version>
+                <configuration>
+                    <useReleaseProfile>false</useReleaseProfile>
+                    <releaseProfiles>release</releaseProfiles>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
