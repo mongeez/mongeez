@@ -1,4 +1,6 @@
 <!--A changelog with no changes. This can occur on first setup of new projects-->
-<mongoChangeLog>
+<mongoChangeLog xmlns="http://www.mongeez.org/xml/ns/mongeez"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.mongeez.org/xml/ns/mongeez mongeez-0.9.xsd">
 </mongoChangeLog> 
 

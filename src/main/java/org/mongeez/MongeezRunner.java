@@ -28,6 +28,7 @@ public class MongeezRunner implements InitializingBean {
     private boolean executeEnabled = false;
     private Mongo mongo;
     private String dbName;
+    private String context;
     private Resource file;
 
     private String userName;
@@ -104,4 +105,12 @@ public class MongeezRunner implements InitializingBean {
 		this.passWord = passWord;
 	}
 
+	public String getContext() {
+		return context;
+	}
+
+	public void setContext(String context) {
+		this.context = context;
+	}
+	
 }
