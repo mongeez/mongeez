@@ -11,3 +11,7 @@ messages.log
 *.ipr
 *.iws
 /target
+.settings/org.eclipse.jdt.core.prefs
+.settings/org.eclipse.wst.common.project.facet.core.xml
+examples/.settings/org.eclipse.jdt.core.prefs
+examples/.settings/org.eclipse.wst.common.project.facet.core.xml
