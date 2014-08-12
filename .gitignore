@@ -15,3 +15,7 @@ messages.log
 .settings/org.eclipse.wst.common.project.facet.core.xml
 examples/.settings/org.eclipse.jdt.core.prefs
 examples/.settings/org.eclipse.wst.common.project.facet.core.xml
+.classpath
+.project
+.settings/org.eclipse.core.resources.prefs
+.settings/org.eclipse.m2e.core.prefs
