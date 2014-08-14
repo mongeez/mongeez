@@ -11,14 +11,14 @@
  */
 package org.mongeez;
 
-import com.mongodb.Mongo;
-
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.core.io.Resource;
 import org.mongeez.reader.ChangeSetFileProvider;
 import org.mongeez.validation.ChangeSetsValidator;
 import org.mongeez.validation.DefaultChangeSetsValidator;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.core.io.Resource;
+
+import com.mongodb.Mongo;
 
 /**
  * @author oleksii
@@ -49,6 +49,7 @@ public class MongeezRunner implements InitializingBean {
         Mongeez mongeez = new Mongeez();
         mongeez.setMongo(mongo);
         mongeez.setDbName(dbName);
+        mongeez.setContext(context);
         if(changeSetsValidator != null) {
             mongeez.setChangeSetsValidator(changeSetsValidator);
         }
