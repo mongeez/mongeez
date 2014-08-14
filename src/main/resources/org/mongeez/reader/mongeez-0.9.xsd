@@ -55,6 +55,7 @@
 		<xsd:attribute name="author" type="xsd:string" use="required" />
 		<xsd:attribute name="contexts" type="xsd:string" />
 		<xsd:attribute name="failOnError" type="xsd:boolean" use="optional" default="true" />
+		<xsd:attribute name="runAlways" type="xsd:boolean" use="optional" default="false" />
 	</xsd:attributeGroup>
 
 </xsd:schema>
