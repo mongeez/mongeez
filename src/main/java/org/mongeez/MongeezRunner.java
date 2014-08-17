@@ -50,10 +50,9 @@ public class MongeezRunner implements InitializingBean {
         mongeez.setMongo(mongo);
         mongeez.setDbName(dbName);
         mongeez.setContext(context);
-        if(changeSetsValidator != null) {
+        if (changeSetsValidator != null) {
             mongeez.setChangeSetsValidator(changeSetsValidator);
-        }
-        else {
+        } else {
             mongeez.setChangeSetsValidator(new DefaultChangeSetsValidator());
         }
         if (changeSetFileProvider != null) {
@@ -61,8 +60,8 @@ public class MongeezRunner implements InitializingBean {
         } else {
             mongeez.setFile(file);
 
-            if(!StringUtils.isEmpty(userName) && !StringUtils.isEmpty(passWord)){
-            	MongoAuth auth = new MongoAuth(userName, passWord);
+            if (!StringUtils.isEmpty(userName) && !StringUtils.isEmpty(passWord)) {
+                MongoAuth auth = new MongoAuth(userName, passWord);
                 mongeez.setAuth(auth);
             }
         }
@@ -98,20 +97,20 @@ public class MongeezRunner implements InitializingBean {
         return dbName;
     }
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
-	public void setPassWord(String passWord) {
-		this.passWord = passWord;
-	}
+    public void setPassWord(String passWord) {
+        this.passWord = passWord;
+    }
 
-	public String getContext() {
-		return context;
-	}
+    public String getContext() {
+        return context;
+    }
 
-	public void setContext(String context) {
-		this.context = context;
-	}
-	
+    public void setContext(String context) {
+        this.context = context;
+    }
+
 }

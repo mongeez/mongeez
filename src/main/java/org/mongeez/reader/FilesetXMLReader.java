@@ -36,7 +36,7 @@ public class FilesetXMLReader {
             digester.setValidating(false);
             digester.setNamespaceAware(true);
             digester.setXMLSchema(SchemaLoader.create().load());
-            
+
             digester.addObjectCreate("changeFiles", ChangeFileSet.class);
             digester.addObjectCreate("changeFiles/file", ChangeFile.class);
             digester.addSetProperties("changeFiles/file");
@@ -49,8 +49,7 @@ public class FilesetXMLReader {
                 for (ChangeFile changeFile : changeFileSet.getChangeFiles()) {
                     files.add(file.createRelative(changeFile.getPath()));
                 }
-            }
-            else {
+            } else {
                 logger.error("The file {} doesn't seem to contain a changeFiles declaration. Are you "
                         + "using the correct file to initialize Mongeez?", file.getFilename());
             }

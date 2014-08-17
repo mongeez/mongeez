@@ -1,8 +1,8 @@
 <changeFiles xmlns="http://www.mongeez.org/xml/ns/mongeez"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.mongeez.org/xml/ns/mongeez mongeez-0.9.xsd">
-	
-	    <file path="changeset-01.xml"/>
-	    <file path="changeset-02.xml"/>
-	
+    
+        <file path="changeset-01.xml"/>
+        <file path="changeset-02.xml"/>
+    
 </changeFiles>

@@ -30,9 +30,9 @@ public class XmlChangeSetReader implements ChangeSetReader {
     private Digester digester;
 
     XmlChangeSetReader() {
-    	
+
         digester = new Digester();
-        
+
         digester.setValidating(false);
         digester.setNamespaceAware(true);
         digester.setXMLSchema(SchemaLoader.create().load());
@@ -61,8 +61,7 @@ public class XmlChangeSetReader implements ChangeSetReader {
             ChangeSetList changeFileSet = (ChangeSetList) digester.parse(file.getInputStream());
             if (changeFileSet == null) {
                 logger.warn("Ignoring change file {}, the parser returned null. Please check your formatting.", file.getFilename());
-            }
-            else {
+            } else {
                 for (ChangeSet changeSet : changeFileSet.getList()) {
                     ChangeSetReaderUtil.populateChangeSetResourceInfo(changeSet, file);
                 }
