@@ -10,3 +10,9 @@ messages.log
 *.iml
 *.ipr
 *.iws
+/target
+
+# Eclipse files
+*.classpath
+*.project
+.settings/
