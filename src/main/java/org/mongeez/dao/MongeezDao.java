@@ -12,23 +12,28 @@
 
 package org.mongeez.dao;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
-import com.mongodb.Mongo;
-import com.mongodb.QueryBuilder;
-import com.mongodb.WriteConcern;
-import org.apache.commons.lang3.time.DateFormatUtils;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.mongeez.MongoAuth;
 import org.mongeez.commands.ChangeSet;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
+import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoCredential;
+import com.mongodb.QueryBuilder;
+import com.mongodb.WriteConcern;
 
 public class MongeezDao {
-    private DB db;
+    private MongoClient db;
+    private String databaseName;
     private List<ChangeSetAttribute> changeSetAttributes;
 
     public MongeezDao(Mongo mongo, String databaseName) {
@@ -36,9 +41,17 @@ public class MongeezDao {
     }
 
     public MongeezDao(Mongo mongo, String databaseName, MongoAuth auth) {
-        db = mongo.getDB(databaseName);
-        if (auth != null){
-        	db.authenticate(auth.getUsername(), auth.getPassword().toCharArray());
+        this.databaseName = databaseName;
+        if (auth != null) {
+
+            if (isNotEmpty(auth.getAuthenticationDatabase())) {
+                db = new MongoClient(mongo.getAllAddress(), Arrays.asList(MongoCredential.createMongoCRCredential(auth.getUsername(), auth.getAuthenticationDatabase(), auth.getPassword()
+                        .toCharArray())));
+            } else {
+                db = new MongoClient(mongo.getAllAddress(), Arrays.asList(MongoCredential.createMongoCRCredential(auth.getUsername(), this.databaseName, auth.getPassword().toCharArray())));
+            }
+        } else {
+            db = new MongoClient(mongo.getAllAddress());
         }
         configure();
     }
@@ -62,15 +75,9 @@ public class MongeezDao {
         if (configRecord == null) {
             if (getMongeezCollection().count() > 0L) {
                 // We have pre-existing records, so don't assume that they support the latest features
-                configRecord =
-                        new BasicDBObject()
-                                .append("type", RecordType.configuration.name())
-                                .append("supportResourcePath", false);
+                configRecord = new BasicDBObject().append("type", RecordType.configuration.name()).append("supportResourcePath", false);
             } else {
-                configRecord =
-                        new BasicDBObject()
-                                .append("type", RecordType.configuration.name())
-                                .append("supportResourcePath", true);
+                configRecord = new BasicDBObject().append("type", RecordType.configuration.name()).append("supportResourcePath", true);
             }
             getMongeezCollection().insert(configRecord, WriteConcern.SAFE);
         }
@@ -91,7 +98,7 @@ public class MongeezDao {
     private void dropObsoleteChangeSetExecutionIndices() {
         String indexName = "type_changeSetExecution_file_1_changeId_1_author_1_resourcePath_1";
         DBCollection collection = getMongeezCollection();
-        for (DBObject dbObject : collection.getIndexInfo()) {
+        for(DBObject dbObject : collection.getIndexInfo()) {
             if (indexName.equals(dbObject.get("name"))) {
                 collection.dropIndex(indexName);
             }
@@ -101,33 +108,33 @@ public class MongeezDao {
     private void ensureChangeSetExecutionIndex() {
         BasicDBObject keys = new BasicDBObject();
         keys.append("type", 1);
-        for (ChangeSetAttribute attribute : changeSetAttributes) {
+        for(ChangeSetAttribute attribute : changeSetAttributes) {
             keys.append(attribute.name(), 1);
         }
-        getMongeezCollection().ensureIndex(keys);
+        getMongeezCollection().createIndex(keys);
     }
 
     public boolean wasExecuted(ChangeSet changeSet) {
         BasicDBObject query = new BasicDBObject();
         query.append("type", RecordType.changeSetExecution.name());
-        for (ChangeSetAttribute attribute : changeSetAttributes) {
+        for(ChangeSetAttribute attribute : changeSetAttributes) {
             query.append(attribute.name(), attribute.getAttributeValue(changeSet));
         }
         return getMongeezCollection().count(query) > 0;
     }
 
     private DBCollection getMongeezCollection() {
-        return db.getCollection("mongeez");
+        return db.getDB(databaseName).getCollection("mongeez");
     }
 
     public void runScript(String code) {
-        db.eval(code);
+        db.getDB(databaseName).eval(code);
     }
 
     public void logChangeSet(ChangeSet changeSet) {
         BasicDBObject object = new BasicDBObject();
         object.append("type", RecordType.changeSetExecution.name());
-        for (ChangeSetAttribute attribute : changeSetAttributes) {
+        for(ChangeSetAttribute attribute : changeSetAttributes) {
             object.append(attribute.name(), attribute.getAttributeValue(changeSet));
         }
         object.append("date", DateFormatUtils.ISO_DATETIME_TIME_ZONE_FORMAT.format(System.currentTimeMillis()));
