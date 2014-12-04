@@ -14,7 +14,6 @@ package org.mongeez.reader;
 
 import org.mongeez.commands.ChangeFile;
 import org.mongeez.commands.ChangeFileSet;
-
 import org.apache.commons.digester3.Digester;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +34,8 @@ public class FilesetXMLReader {
             Digester digester = new Digester();
 
             digester.setValidating(false);
+            digester.setNamespaceAware(true);
+            digester.setXMLSchema(SchemaLoader.create().load());
 
             digester.addObjectCreate("changeFiles", ChangeFileSet.class);
             digester.addObjectCreate("changeFiles/file", ChangeFile.class);
@@ -48,8 +49,7 @@ public class FilesetXMLReader {
                 for (ChangeFile changeFile : changeFileSet.getChangeFiles()) {
                     files.add(file.createRelative(changeFile.getPath()));
                 }
-            }
-            else {
+            } else {
                 logger.error("The file {} doesn't seem to contain a changeFiles declaration. Are you "
                         + "using the correct file to initialize Mongeez?", file.getFilename());
             }

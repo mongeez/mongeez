@@ -10,7 +10,10 @@
   ~ See the License for the specific language governing permissions and limitations under the License.
   -->
 
-<mongoChangeLog>
+<mongoChangeLog xmlns="http://www.mongeez.org/xml/ns/mongeez"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.mongeez.org/xml/ns/mongeez mongeez-0.9.xsd">
+    
     <changeSet changeId="ChangeSet-1" author="d0x">
         <script>
             db.organization.findOne();

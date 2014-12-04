@@ -11,14 +11,14 @@
  */
 package org.mongeez;
 
-import com.mongodb.Mongo;
-
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.core.io.Resource;
 import org.mongeez.reader.ChangeSetFileProvider;
 import org.mongeez.validation.ChangeSetsValidator;
 import org.mongeez.validation.DefaultChangeSetsValidator;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.core.io.Resource;
+
+import com.mongodb.Mongo;
 
 /**
  * @author oleksii
@@ -28,10 +28,12 @@ public class MongeezRunner implements InitializingBean {
     private boolean executeEnabled = false;
     private Mongo mongo;
     private String dbName;
+    private String context;
     private Resource file;
 
     private String userName;
     private String passWord;
+    private String authDb;
 
     private ChangeSetFileProvider changeSetFileProvider;
 
@@ -48,10 +50,10 @@ public class MongeezRunner implements InitializingBean {
         Mongeez mongeez = new Mongeez();
         mongeez.setMongo(mongo);
         mongeez.setDbName(dbName);
-        if(changeSetsValidator != null) {
+        mongeez.setContext(context);
+        if (changeSetsValidator != null) {
             mongeez.setChangeSetsValidator(changeSetsValidator);
-        }
-        else {
+        } else {
             mongeez.setChangeSetsValidator(new DefaultChangeSetsValidator());
         }
         if (changeSetFileProvider != null) {
@@ -59,8 +61,8 @@ public class MongeezRunner implements InitializingBean {
         } else {
             mongeez.setFile(file);
 
-            if(!StringUtils.isEmpty(userName) && !StringUtils.isEmpty(passWord)){
-            	MongoAuth auth = new MongoAuth(userName, passWord);
+            if (!StringUtils.isEmpty(userName) && !StringUtils.isEmpty(passWord)) {
+                MongoAuth auth = new MongoAuth(userName, passWord, authDb);
                 mongeez.setAuth(auth);
             }
         }
@@ -96,12 +98,24 @@ public class MongeezRunner implements InitializingBean {
         return dbName;
     }
 
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
-	public void setPassWord(String passWord) {
-		this.passWord = passWord;
-	}
+    public void setPassWord(String passWord) {
+        this.passWord = passWord;
+    }
+
+    public String getContext() {
+        return context;
+    }
+
+    public void setContext(String context) {
+        this.context = context;
+    }
+
+    public void setAuthDb(String authDb) {
+        this.authDb = authDb;
+    }
 
 }

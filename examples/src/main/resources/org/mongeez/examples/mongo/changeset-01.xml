@@ -1,6 +1,8 @@
-<mongoChangeLog>
+<mongoChangeLog xmlns="http://www.mongeez.org/xml/ns/mongeez"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.mongeez.org/xml/ns/mongeez mongeez-0.9.xsd">
 
-    <changeSet changeId="SMS-1300" author="oleksii">
+    <changeSet changeId="SMS-1300" author="oleksii" >
         <script>
 
             // clear collections
@@ -36,5 +38,5 @@
 
         </script>
     </changeSet>
-
+    
 </mongoChangeLog>

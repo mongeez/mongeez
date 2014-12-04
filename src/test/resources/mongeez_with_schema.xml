@@ -2,6 +2,6 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.mongeez.org/xml/ns/mongeez mongeez-0.9.xsd">
     
-    <file path="changeset_with_contexts.xml"/>
-    
+	<file path="changeset_with_schema.xml"/>
+	
 </changeFiles>

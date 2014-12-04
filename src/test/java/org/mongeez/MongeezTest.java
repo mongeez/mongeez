@@ -15,8 +15,8 @@ package org.mongeez;
 import static org.testng.Assert.assertEquals;
 
 import com.mongodb.DB;
-import com.mongodb.DBCursor;
 import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
 
 import org.mongeez.validation.ValidationException;
 import org.springframework.core.io.ClassPathResource;
@@ -31,7 +31,7 @@ public class MongeezTest {
 
     @BeforeMethod
     protected void setUp() throws Exception {
-        mongo = new Mongo();
+        mongo = new MongoClient();
         db = mongo.getDB(dbName);
 
         db.dropDatabase();
@@ -151,5 +151,19 @@ public class MongeezTest {
     public void testFailDuplicateIds() throws Exception {
         Mongeez mongeez = create("mongeez_fail_on_duplicate_changeset_ids.xml");
         mongeez.process();
+    }
+
+    @Test(groups = "dao")
+    public void testChangeSetWithValidSchema() {
+        assertEquals(db.getCollection("mongeez").count(), 0);
+
+        Mongeez mongeez = create("mongeez_with_schema.xml");
+        mongeez.setContext("organizations");
+        mongeez.process();
+        assertEquals(db.getCollection("mongeez").count(), 4);
+        assertEquals(db.getCollection("car").count(), 2);
+        assertEquals(db.getCollection("user").count(), 0);
+        assertEquals(db.getCollection("organization").count(), 2);
+        assertEquals(db.getCollection("house").count(), 2);
     }
 }
