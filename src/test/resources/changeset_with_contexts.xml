@@ -1,17 +1,18 @@
-<mongoChangeLog xmlns="http://www.mongeez.org/xml/ns/mongeez"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<mongoChangeLog xmlns="http://www.mongeez.org/xml/ns/mongeez" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
     xsi:schemaLocation="http://www.mongeez.org/xml/ns/mongeez mongeez-0.9.xsd">
+    
     <changeSet changeId="ChangeSet-1" author="mlysaght" contexts="organizations">
         <script>
             db.organization.insert({
-                "Organization" : "10Gen",
-                "Location" : "NYC",
-                DateFounded : {"Year" : 2008, "Month" : 01, "day" :01}
+            "Organization" : "10Gen",
+            "Location" : "NYC",
+            DateFounded : {"Year" : 2008, "Month" : 01, "day" :01}
             });
             db.organization.insert({
-                "Organization" : "SecondMarket",
-                "Location" : "NYC",
-                DateFounded : {"Year" : 2004, "Month" : 05, "day" :04}
+            "Organization" : "SecondMarket",
+            "Location" : "NYC",
+            DateFounded : {"Year" : 2004, "Month" : 05, "day" :04}
             });
         </script>
     </changeSet>
@@ -31,7 +32,7 @@
             db.car.insert({ "Type" : "Lamborghini"});
         </script>
     </changeSet>
-   <changeSet changeId="ChangeSet-4" author="exell" contexts="users, organizations">
+    <changeSet changeId="ChangeSet-4" author="exell" contexts="users, organizations">
         <script>
             db.house.insert({ "Type" : "Bungalow"});
         </script>

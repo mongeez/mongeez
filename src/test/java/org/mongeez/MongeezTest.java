@@ -15,7 +15,6 @@ package org.mongeez;
 import static org.testng.Assert.assertEquals;
 
 import com.mongodb.DB;
-import com.mongodb.DBCursor;
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 
@@ -153,14 +152,13 @@ public class MongeezTest {
         Mongeez mongeez = create("mongeez_fail_on_duplicate_changeset_ids.xml");
         mongeez.process();
     }
-    
 
     @Test(groups = "dao")
     public void testChangeSetWithValidSchema() {
-    	assertEquals(db.getCollection("mongeez").count(), 0);
-    	
-    	Mongeez mongeez = create("mongeez_with_schema.xml");
-    	mongeez.setContext("organizations");
+        assertEquals(db.getCollection("mongeez").count(), 0);
+
+        Mongeez mongeez = create("mongeez_with_schema.xml");
+        mongeez.setContext("organizations");
         mongeez.process();
         assertEquals(db.getCollection("mongeez").count(), 4);
         assertEquals(db.getCollection("car").count(), 2);
