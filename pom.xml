@@ -108,6 +108,14 @@
     </dependencies>
 
     <build>
+        <extensions>
+            <extension>
+                <groupId>org.springframework.build</groupId>
+                <artifactId>aws-maven</artifactId>
+                <version>5.0.0.RELEASE</version>
+            </extension>
+        </extensions>    
+      
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
