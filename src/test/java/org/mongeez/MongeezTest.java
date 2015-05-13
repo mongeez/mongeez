@@ -73,7 +73,7 @@ public class MongeezTest {
         assertEquals(db.getCollection("mongeez").count(), 2);
     }
 
-    @Test(groups = "dao", expectedExceptions = com.mongodb.CommandFailureException.class)
+    @Test(groups = "dao", expectedExceptions = com.mongodb.MongoCommandException.class)
     public void testFailOnError_True() throws Exception {
         Mongeez mongeez = create("mongeez_fail_fail.xml");
         mongeez.process();
