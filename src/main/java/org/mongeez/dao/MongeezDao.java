@@ -12,20 +12,23 @@
 
 package org.mongeez.dao;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.apache.commons.lang3.time.DateFormatUtils;
+import org.mongeez.MongoAuth;
+import org.mongeez.commands.ChangeSet;
+
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoCredential;
 import com.mongodb.QueryBuilder;
 import com.mongodb.WriteConcern;
-import org.apache.commons.lang3.time.DateFormatUtils;
-
-import org.mongeez.MongoAuth;
-import org.mongeez.commands.ChangeSet;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MongeezDao {
     private DB db;
@@ -36,28 +39,18 @@ public class MongeezDao {
     }
 
     public MongeezDao(Mongo mongo, String databaseName, MongoAuth auth) {
+        final List<MongoCredential> credentials = new LinkedList<MongoCredential>();
 
-        if (auth != null){
-            if(auth.getAuthDb() == null || auth.getAuthDb().equals(databaseName))
-            {
-                db = mongo.getDB(databaseName);
-                if (!db.authenticate(auth.getUsername(), auth.getPassword().toCharArray())) {
-                    throw new IllegalArgumentException("Failed to authenticate to database [" + databaseName + "]");
-                }
-            }
-            else
-            {
-                db = mongo.getDB(databaseName);
-                DB authDb = mongo.getDB(auth.getAuthDb());
-                if (!authDb.authenticate(auth.getUsername(), auth.getPassword().toCharArray())) {
-                    throw new IllegalArgumentException("Failed to authenticate to database [" + auth.getAuthDb() + "]");
-                }
+        if (auth != null) {
+            if (auth.getAuthDb() == null || auth.getAuthDb().equals(databaseName)) {
+                credentials.add(MongoCredential.createCredential(auth.getUsername(), databaseName, auth.getPassword().toCharArray()));
+            } else {
+                credentials.add(MongoCredential.createCredential(auth.getUsername(), auth.getAuthDb(), auth.getPassword().toCharArray()));
             }
         }
-        else
-        {
-            db = mongo.getDB(databaseName);
-        }
+
+        final MongoClient client = new MongoClient(mongo.getServerAddressList(),  credentials);
+        db = client.getDB(databaseName);
         configure();
     }
 
@@ -122,7 +115,7 @@ public class MongeezDao {
         for (ChangeSetAttribute attribute : changeSetAttributes) {
             keys.append(attribute.name(), 1);
         }
-        getMongeezCollection().ensureIndex(keys);
+        getMongeezCollection().createIndex(keys);
     }
 
     public boolean wasExecuted(ChangeSet changeSet) {
