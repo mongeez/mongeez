@@ -12,16 +12,16 @@
 
 package org.mongeez;
 
-import static org.testng.Assert.assertEquals;
-
 import com.mongodb.DB;
-import com.mongodb.DBCursor;
 import com.mongodb.Mongo;
 
 import org.mongeez.validation.ValidationException;
 import org.springframework.core.io.ClassPathResource;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.fail;
 
 @Test
 public class MongeezTest {
@@ -98,12 +98,22 @@ public class MongeezTest {
     }
 
     @Test(groups = "dao")
-    public void testNoFailureOnNoChangeFilesBlock() throws Exception {
+    public void testFailureOnNoChangeFilesBlock() throws Exception {
         assertEquals(db.getCollection("mongeez").count(), 0);
 
         Mongeez mongeez = create("mongeez_no_changefiles_declared.xml");
-        mongeez.process();
-        assertEquals(db.getCollection("mongeez").count(), 1);
+
+        try
+        {
+            mongeez.process();
+        }
+        catch (MongeezException e)
+        {
+            assertEquals(e.getMessage(), "org.mongeez.MongeezException: The file \"mongeez_no_changefiles_declared.xml\" doesn't seem to contain a changeFiles declaration. Are you using the correct file to initialize Mongeez?");
+            return;
+        }
+
+        fail("Expected MongeezException did not occur");
     }
 
     @Test(groups = "dao")

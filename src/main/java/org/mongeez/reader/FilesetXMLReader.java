@@ -12,15 +12,14 @@
 
 package org.mongeez.reader;
 
+import org.apache.commons.digester3.Digester;
+import org.mongeez.MongeezException;
 import org.mongeez.commands.ChangeFile;
 import org.mongeez.commands.ChangeFileSet;
-
-import org.apache.commons.digester3.Digester;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,13 +49,12 @@ public class FilesetXMLReader {
                 }
             }
             else {
-                logger.error("The file {} doesn't seem to contain a changeFiles declaration. Are you "
-                        + "using the correct file to initialize Mongeez?", file.getFilename());
+                throw new MongeezException(
+                        "The file \"" +  file.getFilename() + "\" doesn't seem to contain a changeFiles declaration. Are you "
+                        + "using the correct file to initialize Mongeez?");
             }
-        } catch (IOException e) {
-            logger.error("IOException", e);
-        } catch (org.xml.sax.SAXException e) {
-            logger.error("SAXException", e);
+        } catch (Exception e) {
+            throw new MongeezException(e);
         }
         return files;
     }
