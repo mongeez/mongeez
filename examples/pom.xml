@@ -3,14 +3,14 @@
 
     <groupId>org.mongeez</groupId>
     <artifactId>examples</artifactId>
-    <version>0.9.3-SNAPSHOT</version>
+    <version>0.9.5-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <dependencies>
         <dependency>
             <groupId>org.mongeez</groupId>
             <artifactId>mongeez</artifactId>
-            <version>0.9.3-SNAPSHOT</version>
+            <version>0.9.5-SNAPSHOT</version>
         </dependency>
 
         <dependency>

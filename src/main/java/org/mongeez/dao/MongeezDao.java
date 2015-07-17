@@ -12,22 +12,28 @@
 
 package org.mongeez.dao;
 
+import com.github.nlloyd.hornofmongo.MongoRuntime;
+import com.github.nlloyd.hornofmongo.MongoScope;
+import com.github.nlloyd.hornofmongo.action.MongoScriptAction;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
 import com.mongodb.Mongo;
+import com.mongodb.MongoException;
 import com.mongodb.QueryBuilder;
 import com.mongodb.WriteConcern;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
 import org.mongeez.MongoAuth;
 import org.mongeez.commands.ChangeSet;
+import org.mozilla.javascript.RhinoException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MongeezDao {
+    private MongoScope mongoScope;
     private DB db;
     private List<ChangeSetAttribute> changeSetAttributes;
 
@@ -36,14 +42,21 @@ public class MongeezDao {
     }
 
     public MongeezDao(Mongo mongo, String databaseName, MongoAuth auth) {
+        mongoScope = MongoRuntime.createMongoScope();
 
         if (auth != null){
-            if(auth.getAuthDb() == null || auth.getAuthDb().equals(databaseName))
-            {
+            if(auth.getAuthDb() == null || auth.getAuthDb().equals(databaseName)) {
                 db = mongo.getDB(databaseName);
                 if (!db.authenticate(auth.getUsername(), auth.getPassword().toCharArray())) {
                     throw new IllegalArgumentException("Failed to authenticate to database [" + databaseName + "]");
                 }
+                final String script = String.format("db = connect('%s:%s/%s','%s','%s')",
+                                                    mongo.getAddress().getHost(),
+                                                    mongo.getAddress().getPort(),
+                                                    databaseName,
+                                                    auth.getUsername(),
+                                                    auth.getPassword());
+                MongoRuntime.call(new MongoScriptAction(mongoScope, "connect", script));
             }
             else
             {
@@ -52,11 +65,24 @@ public class MongeezDao {
                 if (!authDb.authenticate(auth.getUsername(), auth.getPassword().toCharArray())) {
                     throw new IllegalArgumentException("Failed to authenticate to database [" + auth.getAuthDb() + "]");
                 }
+                final String script = String.format("db = connect('%s:%s/%s','%s','%s')",
+                                                    mongo.getAddress().getHost(),
+                                                    mongo.getAddress().getPort(),
+                                                    auth.getAuthDb(),
+                                                    auth.getUsername(),
+                                                    auth.getPassword());
+                MongoRuntime.call(new MongoScriptAction(mongoScope, "connect", script));
+                MongoRuntime.call(new MongoScriptAction(mongoScope, "sibling", String.format("db = db.getSiblingDB('%s')", databaseName)));
             }
         }
         else
         {
             db = mongo.getDB(databaseName);
+            final String script = String.format("db = connect('%s:%s/%s')",
+                                                mongo.getAddress().getHost(),
+                                                mongo.getAddress().getPort(),
+                                                databaseName);
+            MongoRuntime.call(new MongoScriptAction(mongoScope, "connect", script));
         }
         configure();
     }
@@ -139,7 +165,12 @@ public class MongeezDao {
     }
 
     public void runScript(String code) {
-        db.eval(code);
+        try {
+            MongoRuntime.call(new MongoScriptAction(mongoScope, "script", code));
+            //db.eval(code);
+        }catch (RhinoException e){
+            throw new MongoException("Failure in script", e);
+        }
     }
 
     public void logChangeSet(ChangeSet changeSet) {
