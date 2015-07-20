@@ -24,7 +24,6 @@ import com.mongodb.MongoException;
 import com.mongodb.QueryBuilder;
 import com.mongodb.WriteConcern;
 import org.apache.commons.lang3.time.DateFormatUtils;
-
 import org.mongeez.MongoAuth;
 import org.mongeez.commands.ChangeSet;
 import org.mozilla.javascript.RhinoException;

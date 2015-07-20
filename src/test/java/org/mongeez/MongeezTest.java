@@ -13,9 +13,7 @@
 package org.mongeez;
 
 import com.mongodb.DB;
-import com.mongodb.DBCursor;
 import com.mongodb.Mongo;
-
 import org.mongeez.validation.ValidationException;
 import org.springframework.core.io.ClassPathResource;
 import org.testng.annotations.BeforeMethod;
