@@ -19,6 +19,8 @@ import java.nio.charset.Charset;
 import java.util.List;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertTrue;
 
 public class FormattedJavascriptChangeSetReaderTest {
     @Test
@@ -144,6 +146,23 @@ public class FormattedJavascriptChangeSetReaderTest {
     public void testGetChangeSetsIOFailure() throws Exception {
         List<ChangeSet> changeSets = parse("changeset_nonexistant.js");
         assertEquals(changeSets.size(), 0);
+    }
+
+    @Test
+    public void testChangeSetWithContexts() throws Exception {
+        List<ChangeSet> changeSets = parse("changeset_contexts.js");
+        assertEquals(changeSets.size(), 5);
+        assertEquals("users", changeSets.get(0).getContexts());
+
+        assertEquals("users,organizations", changeSets.get(1).getContexts());
+
+        assertTrue(changeSets.get(2).isRunAlways());
+        assertEquals("users,organizations", changeSets.get(2).getContexts());
+
+        assertEquals("users, organizations", changeSets.get(3).getContexts());
+
+        assertTrue(changeSets.get(4).isRunAlways());
+        assertEquals("users, organizations", changeSets.get(4).getContexts());
     }
 
     private List<ChangeSet> parse(String fileName) {
