@@ -13,4 +13,5 @@
 <changeFiles>
     <file path="changeset1.xml"/>
     <file path="changeset2.xml"/>
+    <file path="changeset3.xml"/>
 </changeFiles>
