@@ -2,7 +2,7 @@
 
 mongeez allows you to manage changes of your mongo documents and propagate these changes in sync with your code changes when you perform deployments.
 
-For further information and usage guidelines check out [the wiki](https://github.com/secondmarket/mongeez/wiki/How-to-use-mongeez).
+For further information and usage guidelines check out [the wiki](https://github.com/mongeez/mongeez/wiki/How-to-use-mongeez).
 
 ###  Join the user group
 http://groups.google.com/group/mongeez-users
@@ -32,7 +32,7 @@ repo1.maven.org - http://repo1.maven.org/maven2/org/mongeez/mongeez
 
 Hopefully this thing is routinely green. Travis-CI monitors new code to this project and tests it on a variety of JDKs.
 
-[![Build Status](https://travis-ci.org/secondmarket/mongeez.png?branch=master)](https://travis-ci.org/secondmarket/mongeez)
+[![Build Status](https://travis-ci.org/mongeez/mongeez.png?branch=master)](https://travis-ci.org/mongeez/mongeez)
 
 ## License
 Licensed under the Apache License, Version 2.0: http://www.apache.org/licenses/LICENSE-2.0
