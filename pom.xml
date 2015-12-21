@@ -9,7 +9,7 @@
     
     <groupId>org.mongeez</groupId>
     <artifactId>mongeez</artifactId>
-    <version>0.9.6-SNAPSHOT</version>
+    <version>0.9.6</version>
     <packaging>jar</packaging>
 
     <name>Mongeez</name>
