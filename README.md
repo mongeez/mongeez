@@ -16,7 +16,7 @@ http://groups.google.com/group/mongeez-dev
 <dependency>
     <groupId>org.mongeez</groupId>
 	<artifactId>mongeez</artifactId>
-	<version>0.9.5</version>
+	<version>0.9.6</version>
 </dependency>
 ```
 
