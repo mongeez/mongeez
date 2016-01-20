@@ -15,7 +15,7 @@ package org.mongeez.reader;
 import org.mongeez.commands.ChangeSet;
 import org.mongeez.commands.ChangeSetList;
 import org.mongeez.commands.Script;
-
+import org.mongeez.validation.ValidationException;
 import org.apache.commons.digester3.Digester;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,9 +67,9 @@ public class XmlChangeSetReader implements ChangeSetReader {
                 changeSets.addAll(changeFileSet.getList());
             }
         } catch (IOException e) {
-            logger.error("IOException", e);
+        	throw new ValidationException(e);
         } catch (org.xml.sax.SAXException e) {
-            logger.error("SAXException", e);
+        	throw new ValidationException(e);
         }
         return changeSets;
     }
