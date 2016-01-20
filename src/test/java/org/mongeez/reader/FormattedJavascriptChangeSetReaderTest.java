@@ -11,6 +11,7 @@
 package org.mongeez.reader;
 
 import org.mongeez.commands.ChangeSet;
+import org.mongeez.validation.ValidationException;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.testng.annotations.Test;
@@ -19,7 +20,6 @@ import java.nio.charset.Charset;
 import java.util.List;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
 public class FormattedJavascriptChangeSetReaderTest {
@@ -78,18 +78,14 @@ public class FormattedJavascriptChangeSetReaderTest {
                         "});\n");
     }
 
-    @Test
+    @Test(expectedExceptions = ValidationException.class)
     public void testGetChangeSetsNoHeader() throws Exception {
-        List<ChangeSet> changeSets = parse("changeset_noheader.js");
-        // Current behavior is to ignore broken changeset files
-        assertEquals(changeSets.size(), 0);
+        parse("changeset_noheader.js");
     }
 
-    @Test
+    @Test(expectedExceptions = ValidationException.class)
     public void testGetChangeSetsEmptyScript() throws Exception {
-        List<ChangeSet> changeSets = parse("changeset_emptyscript.js");
-        // Current behavior is to ignore broken changeset files
-        assertEquals(changeSets.size(), 0);
+        parse("changeset_emptyscript.js");
     }
 
     @Test
@@ -142,10 +138,9 @@ public class FormattedJavascriptChangeSetReaderTest {
                         "db.user.insert({ \"Name\" : \"Oleks�� Iepishkin\"});\n");
     }
 
-    @Test
+    @Test(expectedExceptions = ValidationException.class)
     public void testGetChangeSetsIOFailure() throws Exception {
-        List<ChangeSet> changeSets = parse("changeset_nonexistant.js");
-        assertEquals(changeSets.size(), 0);
+        parse("changeset_nonexistant.js");
     }
 
     @Test

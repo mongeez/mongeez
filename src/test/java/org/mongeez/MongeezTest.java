@@ -97,13 +97,12 @@ public class MongeezTest {
         assertEquals(db.getCollection("mongeez").count(), 1);
     }
 
-    @Test(groups = "dao")
+    @Test(groups = "dao", expectedExceptions = ValidationException.class)
     public void testNoFailureOnNoChangeFilesBlock() throws Exception {
         assertEquals(db.getCollection("mongeez").count(), 0);
 
         Mongeez mongeez = create("mongeez_no_changefiles_declared.xml");
         mongeez.process();
-        assertEquals(db.getCollection("mongeez").count(), 1);
     }
 
     @Test(groups = "dao")
