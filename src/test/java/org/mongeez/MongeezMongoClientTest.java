@@ -12,27 +12,28 @@
 
 package org.mongeez;
 
-import com.mongodb.DB;
 import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoDatabase;
 
 import org.testng.annotations.Test;
 
 @Test
-public class MongeezTest extends AbstractMongeezTest {
+public class MongeezMongoClientTest extends AbstractMongeezTest {
 	
-    private DB db;
+    private MongoDatabase mongoDatabase;
 
     @Override
 	protected Mongo prepareDatabase(String databaseName) {
-		Mongo mongo = new Mongo();
-        db = mongo.getDB(databaseName);
-        db.dropDatabase();
-		return mongo;
+        MongoClient mongoClient = new MongoClient();
+        mongoDatabase = mongoClient.getDatabase(databaseName);
+        mongoDatabase.drop();
+		return mongoClient;
 	}
     
 	@Override
 	protected long collectionCount(String collection) {
-		return db.getCollection(collection).count();
+		return mongoDatabase.getCollection(collection).count();
 	}
 
 }
