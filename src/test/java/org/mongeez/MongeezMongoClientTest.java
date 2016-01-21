@@ -20,20 +20,20 @@ import org.testng.annotations.Test;
 
 @Test
 public class MongeezMongoClientTest extends AbstractMongeezTest {
-	
+
     private MongoDatabase mongoDatabase;
 
     @Override
-	protected Mongo prepareDatabase(String databaseName) {
+    protected Mongo prepareDatabase(String databaseName) {
         MongoClient mongoClient = new MongoClient();
         mongoDatabase = mongoClient.getDatabase(databaseName);
         mongoDatabase.drop();
-		return mongoClient;
-	}
-    
-	@Override
-	protected long collectionCount(String collection) {
-		return mongoDatabase.getCollection(collection).count();
-	}
+        return mongoClient;
+    }
+
+    @Override
+    protected long collectionCount(String collection) {
+        return mongoDatabase.getCollection(collection).count();
+    }
 
 }

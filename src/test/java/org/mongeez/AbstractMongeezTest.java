@@ -23,19 +23,19 @@ import com.mongodb.Mongo;
 
 @Test
 public abstract class AbstractMongeezTest {
-	
+
     private static final String DB_NAME = "test_mongeez";
 
     protected abstract Mongo prepareDatabase(String databaseName);
     protected abstract long collectionCount(String collection);
-    
+
     private Mongo mongo;
-    
+
     @BeforeMethod
     protected void setUp() throws Exception {
-    	mongo = prepareDatabase(DB_NAME);
+        mongo = prepareDatabase(DB_NAME);
     }
-    
+
     private Mongeez create(String path) {
         Mongeez mongeez = new Mongeez();
         mongeez.setFile(new ClassPathResource(path));

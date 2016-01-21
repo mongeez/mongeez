@@ -19,20 +19,20 @@ import org.testng.annotations.Test;
 
 @Test
 public class MongeezTest extends AbstractMongeezTest {
-	
+
     private DB db;
 
     @Override
-	protected Mongo prepareDatabase(String databaseName) {
-		Mongo mongo = new Mongo();
+    protected Mongo prepareDatabase(String databaseName) {
+        Mongo mongo = new Mongo();
         db = mongo.getDB(databaseName);
         db.dropDatabase();
-		return mongo;
-	}
-    
-	@Override
-	protected long collectionCount(String collection) {
-		return db.getCollection(collection).count();
-	}
+        return mongo;
+    }
+
+    @Override
+    protected long collectionCount(String collection) {
+        return db.getCollection(collection).count();
+    }
 
 }
