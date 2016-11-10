@@ -16,19 +16,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.mongodb.*;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.mongeez.MongoAuth;
 import org.mongeez.commands.ChangeSet;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
-import com.mongodb.Mongo;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoCredential;
-import com.mongodb.QueryBuilder;
-import com.mongodb.WriteConcern;
+import static com.mongodb.AuthenticationMechanism.*;
 
 public class MongeezDao {
     private DB db;
@@ -39,19 +32,50 @@ public class MongeezDao {
     }
 
     public MongeezDao(Mongo mongo, String databaseName, MongoAuth auth) {
-        final List<MongoCredential> credentials = new LinkedList<MongoCredential>();
+        final List<MongoCredential> credentials = getMongoCredentials(databaseName, auth);
 
-        if (auth != null) {
-            if (auth.getAuthDb() == null || auth.getAuthDb().equals(databaseName)) {
-                credentials.add(MongoCredential.createCredential(auth.getUsername(), databaseName, auth.getPassword().toCharArray()));
-            } else {
-                credentials.add(MongoCredential.createCredential(auth.getUsername(), auth.getAuthDb(), auth.getPassword().toCharArray()));
-            }
-        }
-
-        final MongoClient client = new MongoClient(mongo.getServerAddressList(),  credentials);
+        final MongoClient client = new MongoClient(mongo.getServerAddressList(), credentials);
         db = client.getDB(databaseName);
         configure();
+    }
+
+    private List<MongoCredential> getMongoCredentials(String databaseName, MongoAuth auth) {
+        final List<MongoCredential> credentials = new LinkedList<MongoCredential>();
+        if (auth != null) {
+            String username = auth.getUsername();
+            char[] password = auth.getPassword().toCharArray();
+            String authDatabase = auth.getAuthDb();
+            String authMechanism = auth.getAuthMechanism();
+
+            if (auth.getAuthDb() == null || auth.getAuthDb().equals(databaseName)) {
+                authDatabase = databaseName;
+            }
+
+            MongoCredential credential = getMongoCredential(username, password, authDatabase, authMechanism);
+            credentials.add(credential);
+        }
+        return credentials;
+    }
+
+    private MongoCredential getMongoCredential(String username, char[] password, String authDatabase, String authMechanism) {
+        MongoCredential credential = null;
+        AuthenticationMechanism authenticationMechanism = null;
+        if (authMechanism != null) {
+            authenticationMechanism = AuthenticationMechanism.fromMechanismName(authMechanism);
+        }
+
+        if (authenticationMechanism == PLAIN) {
+            credential = MongoCredential.createPlainCredential(username, authDatabase, password);
+        } else if (authenticationMechanism == MONGODB_CR) {
+            credential = MongoCredential.createMongoCRCredential(username, authDatabase, password);
+        } else if (authenticationMechanism == MONGODB_X509) {
+            credential = MongoCredential.createMongoX509Credential(username);
+        } else if (authenticationMechanism == SCRAM_SHA_1) {
+            credential = MongoCredential.createScramSha1Credential(username, authDatabase, password);
+        } else if (authenticationMechanism == null) {
+            credential = MongoCredential.createCredential(username, authDatabase, password);
+        }
+        return credential;
     }
 
     private void configure() {
