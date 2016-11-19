@@ -17,6 +17,8 @@ import org.mongeez.commands.Script;
 import org.mongeez.dao.MongeezDao;
 
 import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +30,11 @@ public class ChangeSetExecutor {
 
     private MongeezDao dao = null;
     private String context = null;
+
+    public ChangeSetExecutor(MongoClient mongoClient, String dbName, String context) {
+        dao = new MongeezDao(mongoClient, dbName);
+        this.context = context;
+    }
 
     public ChangeSetExecutor(Mongo mongo, String dbName, String context) {
         this(mongo, dbName, context, null);
