@@ -1,6 +1,8 @@
 package org.mongeez.validation;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.mongeez.commands.ChangeSet;
 
@@ -12,18 +14,12 @@ public class DefaultChangeSetsValidator implements ChangeSetsValidator {
     }
 
     private void changeSetIdsNotUnique(List<ChangeSet> changeSets) {
-        for (int i = 0; i < changeSets.size() / 2; i++) {
-            ChangeSet changeSetI = changeSets.get(i);
-            String changeSetIId = changeSetI.getChangeId();
-
-            for (int j = i + 1; j < changeSets.size(); j++) {
-                ChangeSet changeSetJ = changeSets.get(j);
-                String changeSetJId = changeSetJ.getChangeId();
-
-                if (changeSetIId.equals(changeSetJId)) {
-                    throw new ValidationException("ChangeSetId " + changeSetIId + " is not unique.");
-                }
+        Set<String> idSet = new HashSet<String>();
+        for(ChangeSet changeSet: changeSets) {
+            if (idSet.contains(changeSet.getChangeId())) {
+                throw new ValidationException("ChangeSetId " + changeSet.getChangeId() + " is not unique.");
             }
+            idSet.add(changeSet.getChangeId());
         }
     }
 }
