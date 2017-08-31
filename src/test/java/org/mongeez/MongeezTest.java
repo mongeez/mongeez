@@ -17,6 +17,7 @@ import static org.testng.Assert.assertEquals;
 import com.mongodb.DB;
 import com.mongodb.DBCursor;
 import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
 
 import org.mongeez.validation.ValidationException;
 import org.springframework.core.io.ClassPathResource;
@@ -45,9 +46,33 @@ public class MongeezTest {
         return mongeez;
     }
 
+    private Mongeez createWithMongoClient(String path) {
+        MongoClient mongoClient = new MongoClient();
+        db = mongoClient.getDB(dbName);
+        db.dropDatabase();
+
+        Mongeez mongeez = new Mongeez();
+        mongeez.setFile(new ClassPathResource(path));
+        mongeez.setMongoClient(mongoClient);
+        mongeez.setDbName(dbName);
+        return mongeez;
+    }
+
     @Test(groups = "dao")
     public void testMongeez() throws Exception {
         Mongeez mongeez = create("mongeez.xml");
+
+        mongeez.process();
+
+        assertEquals(db.getCollection("mongeez").count(), 5);
+
+        assertEquals(db.getCollection("organization").count(), 2);
+        assertEquals(db.getCollection("user").count(), 2);
+    }
+
+    @Test(groups = "dao")
+    public void testMongeezWithMongoClient() throws Exception {
+        Mongeez mongeez = createWithMongoClient("mongeez.xml");
 
         mongeez.process();
 

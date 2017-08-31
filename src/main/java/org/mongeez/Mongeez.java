@@ -21,6 +21,7 @@ import org.mongeez.validation.ChangeSetsValidator;
 import org.mongeez.validation.DefaultChangeSetsValidator;
 
 import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,7 @@ public class Mongeez {
     private final static Logger logger = LoggerFactory.getLogger(Mongeez.class);
 
     private Mongo mongo = null;
+    private MongoClient mongoClient = null;
     private String dbName;
     private MongoAuth auth = null;
     private ChangeSetFileProvider changeSetFileProvider = null;
@@ -42,7 +44,13 @@ public class Mongeez {
 
     public void process() {
         List<ChangeSet> changeSets = getChangeSets();
-        new ChangeSetExecutor(mongo, dbName, context, auth).execute(changeSets);
+        if (mongo != null) {
+            new ChangeSetExecutor(mongo, dbName, context, auth).execute(changeSets);
+        } else if (mongoClient != null) {
+            new ChangeSetExecutor(mongoClient, dbName, context).execute(changeSets);
+        } else {
+            throw new IllegalStateException("Neither mongo nor mongoClient has been configured!");
+        }
     }
 
     private List<ChangeSet> getChangeSets() {
@@ -73,6 +81,10 @@ public class Mongeez {
                 }
             }
         }
+    }
+
+    public void setMongoClient(MongoClient mongoClient) {
+        this.mongoClient = mongoClient;
     }
 
     public void setMongo(Mongo mongo) {

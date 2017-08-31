@@ -34,6 +34,11 @@ public class MongeezDao {
     private DB db;
     private List<ChangeSetAttribute> changeSetAttributes;
 
+    public MongeezDao(MongoClient mongoClient, String databaseName) {
+        db = mongoClient.getDB(databaseName);
+        configure();
+    }
+
     public MongeezDao(Mongo mongo, String databaseName) {
         this(mongo, databaseName, null);
     }
