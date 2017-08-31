@@ -12,16 +12,15 @@
 
 package org.mongeez;
 
-import static org.testng.Assert.assertEquals;
-
-import com.mongodb.DB;
-import com.mongodb.DBCursor;
-import com.mongodb.Mongo;
-
 import org.mongeez.validation.ValidationException;
 import org.springframework.core.io.ClassPathResource;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import com.mongodb.DB;
+import com.mongodb.Mongo;
+
+import static org.testng.Assert.assertEquals;
 
 @Test
 public class MongeezTest {
@@ -51,7 +50,7 @@ public class MongeezTest {
 
         mongeez.process();
 
-        assertEquals(db.getCollection("mongeez").count(), 5);
+		assertEquals(db.getCollection("mongeez").count(), 7);
 
         assertEquals(db.getCollection("organization").count(), 2);
         assertEquals(db.getCollection("user").count(), 2);
@@ -152,4 +151,13 @@ public class MongeezTest {
         Mongeez mongeez = create("mongeez_fail_on_duplicate_changeset_ids.xml");
         mongeez.process();
     }
+
+	@Test(groups = "dao")
+	public void testBsh() throws Exception {
+		Mongeez mongeez = create("mongeez.xml");
+
+		mongeez.process();
+
+		assertEquals(db.getCollection("movice").count(), 2);
+	}
 }
