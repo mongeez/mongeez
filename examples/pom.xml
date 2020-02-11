@@ -103,7 +103,7 @@
         <repository>
             <id>morphia.googlecode.com</id>
             <name>Morphia Repo at Google Code</name>
-            <url>http://morphia.googlecode.com/svn/mavenrepo</url>
+            <url>https://morphia.googlecode.com/svn/mavenrepo</url>
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
