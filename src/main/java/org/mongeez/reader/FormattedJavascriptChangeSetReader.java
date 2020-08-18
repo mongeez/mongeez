@@ -37,6 +37,9 @@ public class FormattedJavascriptChangeSetReader implements ChangeSetReader {
     private static final Pattern ATTRIBUTE_RUN_ALWAYS_PATTERN =
             Pattern.compile(".*runAlways:(\\w+).*",
                     Pattern.CASE_INSENSITIVE);
+    private static final Pattern ATTRIBUTE_RUN_AS_COMMAND_PATTERN =
+            Pattern.compile(".*runAsCommand:(\\w+).*",
+                    Pattern.CASE_INSENSITIVE);
     private static final Pattern ATTRIBUTE_CONTEXTS_PATTERN =
             Pattern.compile(".*contexts:([\\w]+(?:, *[\\w]+)*).*",
                     Pattern.CASE_INSENSITIVE);
@@ -140,6 +143,7 @@ public class FormattedJavascriptChangeSetReader implements ChangeSetReader {
             changeSet.setAuthor(changeSetMatcher.group(1));
             changeSet.setChangeId(changeSetMatcher.group(2));
             changeSet.setRunAlways(parseAttribute(ATTRIBUTE_RUN_ALWAYS_PATTERN.matcher(line), false));
+            changeSet.setRunAsCommand(parseAttribute(ATTRIBUTE_RUN_AS_COMMAND_PATTERN.matcher(line), false));
             changeSet.setContexts(parseAttributeString(ATTRIBUTE_CONTEXTS_PATTERN.matcher(line)));
         }
         return changeSet;

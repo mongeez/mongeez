@@ -31,4 +31,7 @@ public class Script {
     public void run(MongeezDao dao) {
         dao.runScript(body);
     }
+    public void runAsCommand(MongeezDao dao) {
+        dao.runScriptAsCommand(body);
+    }
 }

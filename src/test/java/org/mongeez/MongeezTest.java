@@ -12,16 +12,16 @@
 
 package org.mongeez;
 
-import static org.testng.Assert.assertEquals;
-
 import com.mongodb.DB;
-import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 import com.mongodb.Mongo;
-
+import com.mongodb.QueryBuilder;
 import org.mongeez.validation.ValidationException;
 import org.springframework.core.io.ClassPathResource;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import static org.testng.Assert.assertEquals;
 
 @Test
 public class MongeezTest {
@@ -150,5 +150,31 @@ public class MongeezTest {
     public void testFailDuplicateIds() throws Exception {
         Mongeez mongeez = create("mongeez_fail_on_duplicate_changeset_ids.xml");
         mongeez.process();
+    }
+
+    @Test(groups = "commands")
+    public void testScriptWithCommand(){
+        Mongeez mongeez = create("mongeez_with_command_insert.xml");
+        mongeez.process();
+        assertEquals(db.getCollection("commands").count(), 1);
+
+        DBObject q = new QueryBuilder().put("code").is("CODE1").get();
+        DBObject result = db.getCollection("commands").findOne(q);
+        assertEquals(((String) result.get("description")), "example of organization1");
+    }
+
+
+    @Test(groups = "commands")
+    public void testScriptWithCommandUpdate(){
+        Mongeez mongeez = create("mongeez_with_command_insert.xml");
+        mongeez.process();
+
+        mongeez = create("mongeez_with_command_update.xml");
+        mongeez.process();
+        assertEquals(db.getCollection("commands").count(), 1);
+
+        DBObject q = new QueryBuilder().put("code").is("CODE1").get();
+        DBObject result = db.getCollection("commands").findOne(q);
+        assertEquals(((String) result.get("description")), "updated description of organization1");
     }
 }
