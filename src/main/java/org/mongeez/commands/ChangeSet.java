@@ -26,6 +26,16 @@ public class ChangeSet {
     private boolean failOnError = true;
     private boolean runAlways;
 
+    private boolean runAsCommand;
+
+    public boolean isRunAsCommand() {
+        return runAsCommand;
+    }
+
+    public void setRunAsCommand(boolean runAsCommand) {
+        this.runAsCommand = runAsCommand;
+    }
+
     private List<Script> commands = new ArrayList<Script>();
 
     public String getChangeId() {

@@ -4,21 +4,13 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at  http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
 package org.mongeez.dao;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.apache.commons.lang3.time.DateFormatUtils;
-import org.mongeez.MongoAuth;
-import org.mongeez.commands.ChangeSet;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -29,10 +21,24 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoCredential;
 import com.mongodb.QueryBuilder;
 import com.mongodb.WriteConcern;
+import com.mongodb.client.MongoDatabase;
+import org.apache.commons.lang3.time.DateFormatUtils;
+import org.bson.BsonDocument;
+import org.bson.Document;
+import org.mongeez.MongoAuth;
+import org.mongeez.commands.ChangeSet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class MongeezDao {
     private DB db;
+    private MongoDatabase mongoDatabase;
     private List<ChangeSetAttribute> changeSetAttributes;
+    private final Logger logger = LoggerFactory.getLogger(MongeezDao.class);
 
     public MongeezDao(Mongo mongo, String databaseName) {
         this(mongo, databaseName, null);
@@ -49,8 +55,9 @@ public class MongeezDao {
             }
         }
 
-        final MongoClient client = new MongoClient(mongo.getServerAddressList(),  credentials);
+        final MongoClient client = new MongoClient(mongo.getServerAddressList(), credentials);
         db = client.getDB(databaseName);
+        mongoDatabase = client.getDatabase(databaseName);
         configure();
     }
 
@@ -131,8 +138,35 @@ public class MongeezDao {
         return db.getCollection("mongeez");
     }
 
+    private StringBuilder getChangeSetAttributesStr() {
+        StringBuilder changeSetAttributesStr = new StringBuilder();
+        for (ChangeSetAttribute attribute : changeSetAttributes) {
+            changeSetAttributesStr.append(attribute.name());
+        }
+        return changeSetAttributesStr;
+    }
+
     public void runScript(String code) {
-        db.eval(code);
+        logger.debug("start MongeezDao.runScript code: " + code + ", changeSetAttributes: " + getChangeSetAttributesStr().toString());
+        Object result = db.eval(code);
+        if (result != null) {
+            logger.debug("end MongeezDao.runScript result: " + result.toString());
+        } else {
+            logger.debug("end MongeezDao.runScript");
+        }
+    }
+
+    public void runScriptAsCommand(String code) {
+        logger.debug("start MongeezDao.runScriptCommand code: " + code + ", changeSetAttributes: " + getChangeSetAttributesStr().toString());
+        BsonDocument script = BsonDocument.parse(code);
+        logger.debug("MongeezDao.runScriptCommand script: " + script.toString());
+        logger.debug("MongeezDao.runScriptCommand runCommand");
+        Document result = mongoDatabase.runCommand(script);
+        if (result != null) {
+            logger.debug("end MongeezDao.runScriptCommand result: " + result.toJson());
+        } else {
+            logger.debug("end MongeezDao.runScriptCommand");
+        }
     }
 
     public void logChangeSet(ChangeSet changeSet) {
