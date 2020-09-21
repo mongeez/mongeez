@@ -2,7 +2,7 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at  http://www.apache.org/licenses/LICENSE-2.0
- *  
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed
  * on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
@@ -36,6 +36,9 @@ public class FormattedJavascriptChangeSetReader implements ChangeSetReader {
                     Pattern.CASE_INSENSITIVE);
     private static final Pattern ATTRIBUTE_RUN_ALWAYS_PATTERN =
             Pattern.compile(".*runAlways:(\\w+).*",
+                    Pattern.CASE_INSENSITIVE);
+    private static final Pattern ATTRIBUTE_RUN_AS_COMMAND_PATTERN =
+            Pattern.compile(".*runAsCommand:(\\w+).*",
                     Pattern.CASE_INSENSITIVE);
     private static final Pattern ATTRIBUTE_CONTEXTS_PATTERN =
             Pattern.compile(".*contexts:([\\w]+(?:, *[\\w]+)*).*",
@@ -140,6 +143,7 @@ public class FormattedJavascriptChangeSetReader implements ChangeSetReader {
             changeSet.setAuthor(changeSetMatcher.group(1));
             changeSet.setChangeId(changeSetMatcher.group(2));
             changeSet.setRunAlways(parseAttribute(ATTRIBUTE_RUN_ALWAYS_PATTERN.matcher(line), false));
+            changeSet.setRunAsCommand(parseAttribute(ATTRIBUTE_RUN_AS_COMMAND_PATTERN.matcher(line), false));
             changeSet.setContexts(parseAttributeString(ATTRIBUTE_CONTEXTS_PATTERN.matcher(line)));
         }
         return changeSet;
